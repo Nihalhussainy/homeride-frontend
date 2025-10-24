@@ -1,0 +1,280 @@
+/* src/components/SimpleRideCard.css - ENHANCED THEME-ALIGNED VERSION */
+
+.simple-ride-card {
+  background: linear-gradient(145deg, var(--surface-color), rgba(30, 41, 59, 0.5)); /* Dark gradient */
+  border: 1px solid var(--surface-color-light);
+  border-radius: 16px; /* Consistent rounded corners */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Darker shadow */
+  overflow: hidden;
+  position: relative; /* Needed for pseudo-element */
+}
+
+/* Subtle glow effect on hover */
+.simple-ride-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899); /* Accent gradient */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.simple-ride-card:hover {
+  transform: translateY(-4px) scale(1.01); /* Slightly lift and scale */
+  border-color: rgba(59, 130, 246, 0.5); /* Blueish border */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.simple-ride-card:hover::before {
+  opacity: 1;
+}
+
+.card-grid-container {
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* Time | Route | Price */
+  grid-template-rows: auto 1fr auto auto auto; /* Time, Connector, Time, Divider, Footer */
+  align-items: center;
+  gap: 4px 24px; /* Slightly more horizontal gap */
+  padding: 24px 28px; /* More padding */
+}
+
+/* --- Column 1: Timeline --- */
+.time-start, .time-end {
+  font-weight: 700;
+  font-size: 1.15rem; /* Slightly larger time */
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: 0.5px; /* Add spacing */
+}
+.time-start { grid-area: 1 / 1; }
+.time-end { grid-area: 3 / 1; }
+
+.timeline-connector {
+  grid-area: 2 / 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  min-height: 45px; /* Ensure space for duration */
+}
+.timeline-line {
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--surface-color-light), var(--surface-color)); /* Fading line */
+  border-radius: 1.5px;
+}
+.duration-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--surface-color); /* Match card background */
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--surface-color-light); /* Subtle border */
+  white-space: nowrap;
+}
+
+/* --- Column 2: Route --- */
+.location-start, .location-end {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.location-start { grid-area: 1 / 2; }
+.location-end { grid-area: 3 / 2; }
+
+.location-icon {
+  font-size: 1.3rem; /* Slightly larger icons */
+  flex-shrink: 0;
+}
+.location-icon.origin { color: #10b981; } /* Keep distinct colors */
+.location-icon.destination { color: #ef4444; }
+
+.location-text {
+  font-size: 1.1rem; /* Slightly reduced font */
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Handle long names */
+}
+
+/* --- Column 3: Price --- */
+.price-container {
+  grid-area: 1 / 3 / 4 / 4; /* Span all three rows in the third column */
+  background: rgba(59, 130, 246, 0.1); /* Blueish background */
+  padding: 16px 20px;
+  border-radius: 12px;
+  text-align: center;
+  align-self: center; /* Vertically center */
+  display: flex;
+  flex-direction: column; /* Stack price and label */
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  min-width: 100px;
+}
+.price-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color); /* White price */
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.price-label { /* Add a label for clarity */
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7); /* Lighter secondary text */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* --- Bottom Row --- */
+.card-divider {
+  grid-area: 4 / 1 / 5 / 4; /* Span all columns */
+  height: 1px;
+  background-color: var(--surface-color-light);
+  margin: 18px 0; /* More spacing */
+}
+
+.driver-container {
+  grid-area: 5 / 1 / 6 / 3; /* Span first two columns */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push date to the right */
+  gap: 14px;
+}
+
+.driver-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.driver-avatar-wrapper { position: relative; }
+.driver-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--surface-color-light); /* Add border */
+}
+.driver-avatar-placeholder { width: 44px; height: 44px; color: var(--text-secondary); }
+.driver-info-text { display: flex; flex-direction: column; gap: 2px; }
+.driver-name { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
+.driver-rating { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; }
+.star-icon { color: #fbbf24; }
+.rating-value { color: var(--text-secondary); font-weight: 500; }
+
+.date-badge {
+  background-color: var(--surface-color-light);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.seats-container {
+  grid-area: 5 / 3; /* Place in the third column */
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.seats-container.low-seats {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+.seats-icon { font-size: 1.1rem; }
+.seats-text { font-size: 0.9rem; white-space: nowrap; }
+
+.simple-ride-card-error {
+  padding: 24px;
+  text-align: center;
+  color: var(--danger-color);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Responsive Design (Minor adjustments might be needed based on testing) */
+@media (max-width: 650px) {
+    .card-grid-container {
+        grid-template-columns: auto 1fr; /* Time | Route+Price */
+        grid-template-rows: auto auto 1fr auto auto auto auto; /* Time, Loc, Connector, Time, Loc, Divider, Footer */
+        gap: 8px 16px;
+        padding: 20px 24px;
+    }
+
+    .time-start { grid-area: 1 / 1; }
+    .location-start { grid-area: 1 / 2; }
+
+    .timeline-connector {
+        grid-area: 2 / 1 / 4 / 2; /* Span two rows vertically */
+        margin-left: calc(50% - 1.5px); /* Center align */
+        min-height: 30px;
+    }
+
+    .time-end { grid-area: 3 / 1; }
+    .location-end { grid-area: 3 / 2; }
+
+    .price-container {
+        grid-area: 4 / 1 / 5 / 3; /* Span full width in a new row */
+        margin-top: 16px;
+        flex-direction: row; /* Side-by-side on small screens */
+        justify-content: space-between;
+        padding: 10px 16px;
+    }
+    .price-label { margin-bottom: 0; }
+
+    .card-divider { grid-area: 5 / 1 / 6 / 3; margin: 16px 0; }
+    .driver-container { grid-area: 6 / 1 / 7 / 3; } /* Span full width */
+    .seats-container {
+        grid-area: 7 / 1 / 8 / 3; /* Span full width */
+        margin-top: 12px;
+        justify-self: center; /* Center horizontally */
+        width: fit-content; /* Adjust width */
+    }
+}
+
+@media (max-width: 400px) {
+    .price-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+    .driver-container {
+      flex-direction: column;
+      align-items: flex-start; /* Align driver info left */
+      gap: 10px;
+    }
+    .date-badge {
+      align-self: flex-start; /* Align date left */
+    }
+    .seats-container {
+      justify-self: flex-start; /* Align seats left */
+    }
+    .location-text {
+      font-size: 1rem;
+    }
+    .time-start, .time-end {
+      font-size: 1.05rem;
+    }
+}

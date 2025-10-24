@@ -1,0 +1,264 @@
+/* src/components/RatingModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(17, 24, 39, 0.8); /* Dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: linear-gradient(145deg, var(--surface-color), var(--surface-color-light));
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 90%;
+  max-width: 550px; /* Adjusted max-width */
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  transform: scale(0.95);
+  animation: scaleIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 30px; /* Increased margin */
+  text-align: center;
+  font-size: 1.6rem; /* Slightly larger */
+  color: var(--text-primary);
+}
+
+/* --- Custom Dropdown Styles --- */
+.custom-dropdown-container {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.custom-dropdown-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--background-color); /* Darker background */
+  border: 1px solid var(--surface-color-light);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px; /* Match input height */
+  box-sizing: border-box;
+}
+
+.custom-dropdown-display:hover {
+  border-color: rgba(59, 130, 246, 0.5); /* Primary color border on hover */
+}
+
+.custom-dropdown-display.open {
+  border-color: #3b82f6; /* Brighter border when open */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.custom-dropdown-display span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-arrow {
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+  flex-shrink: 0; /* Prevent arrow from shrinking */
+  margin-left: 10px;
+}
+
+.custom-dropdown-display.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.custom-dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--surface-color); /* Slightly lighter than input bg */
+  border: 1px solid #3b82f6; /* Match open border color */
+  border-top: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1010; /* Above modal overlay */
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-option {
+  padding: 12px 16px;
+  cursor: pointer;
+  color: var(--text-primary);
+  border-radius: 6px;
+  margin-bottom: 4px; /* Spacing between options */
+  transition: background-color 0.2s, color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dropdown-option:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-option:hover {
+  background-color: rgba(59, 130, 246, 0.15); /* Light blue highlight */
+}
+
+.dropdown-option.selected {
+  background-color: rgba(59, 130, 246, 0.25);
+  font-weight: 600;
+  color: #60a5fa; /* Brighter blue for selected */
+}
+
+.dropdown-option.already-rated {
+  color: var(--text-secondary); /* Dim already rated options */
+  /* cursor: not-allowed; Remove if you don't disable selection */
+}
+
+.rated-indicator {
+    font-size: 0.8em;
+    color: #10b981; /* Green color for rated status */
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px; /* Space it from the name */
+}
+
+.rated-indicator svg {
+    font-size: 0.9em; /* Slightly smaller check icon */
+}
+
+
+/* Message when selected user is already rated */
+.already-rated-message {
+    color: #10b981; /* Green color */
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Display for single option */
+.custom-dropdown-display.single-option {
+    cursor: default;
+    background: transparent;
+    border: none;
+    padding: 14px 0; /* Adjust padding */
+    justify-content: center;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.custom-dropdown-display.single-option:hover {
+    border-color: transparent; /* Prevent border on hover */
+}
+
+/* --- End Custom Dropdown Styles --- */
+
+
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px; /* Increased margin */
+  gap: 12px; /* Increased gap */
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating .star {
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.star-rating .star:hover {
+    transform: scale(1.25); /* Slightly larger hover effect */
+}
+
+.modal-content textarea {
+  width: 100%;
+  height: 100px;
+  padding: 14px;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  border: 1px solid var(--surface-color-light);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s; /* Added opacity transition */
+}
+
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #3b82f6; /* Use primary color */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.modal-content textarea:disabled {
+    background-color: var(--surface-color-light);
+    cursor: not-allowed;
+}
+
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px; /* Increased gap */
+  margin-top: 10px; /* Reduced margin slightly */
+}
+
+/* Apply consistent height and vertical alignment to buttons in actions */
+.modal-actions .custom-button {
+    min-height: 44px; /* Ensure buttons have a minimum height */
+    display: inline-flex;
+    align-items: center;
+}
+
+
+/* For labels in EditUserModal (Keep if reusing modal CSS) */
+.modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}

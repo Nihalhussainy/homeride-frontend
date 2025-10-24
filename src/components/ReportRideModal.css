@@ -1,0 +1,307 @@
+/* Report Ride Modal Styles */
+
+.report-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    padding: 20px;
+}
+
+.report-modal-content {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.report-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid var(--surface-color-light);
+}
+
+.report-modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.report-modal-header h3 svg {
+    color: #ef4444;
+    font-size: 1.3rem;
+}
+
+.close-report-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.close-report-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.close-report-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.report-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+.ride-info-summary {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.ride-info-summary p {
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.ride-date {
+    display: inline-block;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.report-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.reason-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reason-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reason-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+}
+
+.reason-option input[type="radio"] {
+    cursor: pointer;
+    accent-color: var(--primary-color);
+    width: 18px;
+    height: 18px;
+}
+
+.reason-option input[type="radio"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.reason-label {
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    flex: 1;
+}
+
+.reason-option input[type="radio"]:checked + .reason-label {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.report-textarea {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.report-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.report-textarea:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.char-count {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.report-error {
+    padding: 14px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    margin: -8px 0 0 0;
+}
+
+.report-error p {
+    margin: 0;
+    color: #ef4444;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.report-modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--surface-color-light);
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.btn-cancel,
+.btn-submit {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-color-light);
+}
+
+.btn-cancel:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--text-secondary);
+}
+
+.btn-cancel:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-submit {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #ffffff ;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.608);
+}
+
+.btn-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .report-modal-overlay {
+        padding: 10px;
+    }
+
+    .report-modal-content {
+        max-height: 90vh;
+    }
+
+    .report-modal-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .report-modal-body {
+        padding: 16px;
+    }
+
+    .ride-info-summary {
+        padding: 12px;
+    }
+
+    .reason-option {
+        padding: 12px 14px;
+    }
+
+    .reason-label {
+        font-size: 0.9rem;
+    }
+
+    .report-modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        padding: 14px;
+    }
+}

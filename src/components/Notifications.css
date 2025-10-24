@@ -1,0 +1,122 @@
+/* src/components/Notifications.css */
+
+.notification-container {
+    position: relative;
+}
+
+.notification-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    position: relative;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.notification-button:hover {
+    background-color: var(--surface-color-light);
+    color: var(--text-primary);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--danger-color);
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--surface-color);
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: calc(100% + 15px);
+    right: 0;
+    background-color: #1a1a1a;
+    border: 1px solid var(--surface-color-light);
+    border-radius: var(--border-radius);
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    animation: dropdown-in 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    padding: 0;
+    transform-origin: top right;
+    z-index: 1100;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--surface-color-light);
+}
+
+.notification-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.notification-header button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--surface-color-light);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+    background-color: var(--surface-color-light);
+}
+
+.notification-item.read {
+    opacity: 0.6;
+}
+
+
+.notification-item p {
+    margin: 0 0 4px 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.notification-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.no-notifications {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+}

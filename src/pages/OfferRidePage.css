@@ -1,0 +1,937 @@
+/* Prefixed styles for OfferRidePage ONLY */
+
+.offer-ride-page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 60px,
+      rgba(255, 255, 255, 0.01) 60px,
+      rgba(255, 255, 255, 0.01) 120px
+    ),
+    var(--background-color);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background elements */
+.offer-ride-page-container::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.offer-ride-page-container::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(50px);
+  animation: float 25s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+.offer-ride-page-container .form-card-container {
+  width: 100%;
+  max-width: 550px;
+  position: relative;
+  z-index: 1;
+}
+
+.offer-ride-page-container .progress-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.offer-ride-page-container .progress-step {
+  flex: 1;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+}
+
+.offer-ride-page-container .progress-step.active {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.offer-ride-page-container .form-card {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 32px;
+  padding: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.offer-ride-page-container .form-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.offer-ride-page-container .step-content {
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.offer-ride-page-container .form-card h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 12px 0;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.offer-ride-page-container .form-card p {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.offer-ride-page-container .form-field {
+  margin-bottom: 24px;
+}
+
+.offer-ride-page-container .form-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  padding-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+.offer-ride-page-container .form-field label svg {
+  color: #3b82f6;
+}
+
+.offer-ride-page-container .form-field:hover label {
+  color: var(--text-primary);
+}
+
+/* Scoped Custom Input Style */
+.offer-ride-page-container .custom-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .custom-input:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(34, 34, 34, 0.8);
+}
+
+.offer-ride-page-container .custom-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: rgba(34, 34, 34, 0.9);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.offer-ride-page-container .custom-input::placeholder {
+  color: rgba(136, 136, 136, 0.6);
+}
+
+.offer-ride-page-container .form-actions {
+  margin-top: 36px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Scoped Custom Button Style for this page */
+.offer-ride-page-container .custom-button {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); /* Blue Gradient */
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); /* Blue Shadow */
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* Resetting inherited properties if needed */
+  text-shadow: none;
+}
+.offer-ride-page-container .custom-button::before {
+  display: none; /* Hide the gradient border from the global style */
+}
+
+.offer-ride-page-container .custom-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5); /* Enhanced Blue Shadow */
+  background: linear-gradient(135deg, #4b92f7 0%, #9c6df7 100%); /* Lighter gradient on hover */
+}
+
+.offer-ride-page-container .custom-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.offer-ride-page-container .custom-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: var(--surface-color-light); /* Fallback disabled background */
+  color: var(--text-secondary);
+}
+
+/* Scoped Secondary Button Style for this page */
+.offer-ride-page-container .custom-button.secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: none; /* Override global secondary shadow */
+}
+
+.offer-ride-page-container .custom-button.secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px); /* Keep hover effect */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ... (Keep the rest of the styles from OfferRidePage.css, but prefix ALL selectors with .offer-ride-page-container) ... */
+
+.offer-ride-page-container .stop-input-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  background: rgba(34, 34, 34, 0.4);
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .remove-stop-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-top: 28px; /* Adjust as needed based on input height */
+}
+
+.offer-ride-page-container .remove-stop-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  transform: scale(1.1) rotate(90deg);
+}
+
+.offer-ride-page-container .add-stopover-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1.5px dashed rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.05);
+  color: #3b82f6;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.offer-ride-page-container .add-stopover-btn:hover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.offer-ride-page-container .passenger-counter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 40px 0;
+}
+
+.offer-ride-page-container .count-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(34, 34, 34, 0.6);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .count-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-color: #3b82f6;
+  color: white;
+  transform: scale(1.15) rotateZ(-10deg);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.offer-ride-page-container .count-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.offer-ride-page-container .count-display {
+  font-size: 5.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.offer-ride-page-container .custom-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  min-height: 100px;
+}
+
+.offer-ride-page-container .custom-textarea:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(34, 34, 34, 0.8);
+}
+
+.offer-ride-page-container .custom-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: rgba(34, 34, 34, 0.9);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Custom Date Picker */
+.offer-ride-page-container .custom-date-picker-container {
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.offer-ride-page-container .calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.offer-ride-page-container .calendar-nav-btn {
+  background: transparent;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 1.3rem;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.offer-ride-page-container .calendar-nav-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  transform: scale(1.2);
+  color: #8b5cf6;
+}
+
+.offer-ride-page-container .calendar-month-year {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 150px;
+}
+
+.offer-ride-page-container .calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.offer-ride-page-container .weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offer-ride-page-container .calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.offer-ride-page-container .calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(34, 34, 34, 0.4);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.offer-ride-page-container .calendar-day:hover:not(.disabled):not(.empty) {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: #3b82f6;
+  transform: scale(1.08);
+}
+
+.offer-ride-page-container .calendar-day.selected {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.offer-ride-page-container .calendar-day.disabled,
+.offer-ride-page-container .calendar-day.empty {
+  color: var(--text-secondary);
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Custom Time Picker */
+.offer-ride-page-container .custom-time-picker-container {
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .time-picker-display {
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 28px;
+  letter-spacing: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.offer-ride-page-container .time-picker-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.offer-ride-page-container .time-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.offer-ride-page-container .time-up-btn,
+.offer-ride-page-container .time-down-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(34, 34, 34, 0.6);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .time-up-btn:hover,
+.offer-ride-page-container .time-down-btn:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-color: #3b82f6;
+  color: white;
+  transform: scale(1.1);
+}
+
+.offer-ride-page-container .time-display {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  width: 70px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+/* Price Slider */
+.offer-ride-page-container .price-slider-container {
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .price-display-box {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.offer-ride-page-container .price-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offer-ride-page-container .price-value {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.offer-ride-page-container .recommendation-pills {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.offer-ride-page-container .pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: var(--text-primary);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.offer-ride-page-container .pill.low,
+.offer-ride-page-container .pill.high {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-ride-page-container .pill.recommended {
+  background: rgba(52, 211, 153, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.4);
+}
+
+.offer-ride-page-container .pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.offer-ride-page-container .slider-control-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.offer-ride-page-container .control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(34, 34, 34, 0.6);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  backdrop-filter: blur(10px);
+}
+
+.offer-ride-page-container .control-btn:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-color: #3b82f6;
+  color: white;
+  transform: scale(1.15);
+}
+
+.offer-ride-page-container .price-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-radius: 3px;
+  outline: none;
+}
+
+.offer-ride-page-container .price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.offer-ride-page-container .price-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
+}
+
+.offer-ride-page-container .price-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Stopover Pricing */
+.offer-ride-page-container .stopover-pricing-row {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(52, 211, 153, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.offer-ride-page-container .link-button {
+  background: none;
+  border: none;
+  color: #34d399;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.offer-ride-page-container .link-button:hover {
+  opacity: 0.8;
+  text-decoration-thickness: 2px;
+}
+
+/* Modal */
+/* (Keep modal styles as they are, but prefix them too) */
+.offer-ride-page-container .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.offer-ride-page-container .modal-card {
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.offer-ride-page-container .modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-ride-page-container .modal-close:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg);
+}
+
+.offer-ride-page-container .modal-card h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.offer-ride-page-container .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.offer-ride-page-container .stop-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  background: rgba(34, 34, 34, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.offer-ride-page-container .stop-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.offer-ride-page-container .stop-names {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.offer-ride-page-container .stop-price-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.offer-ride-page-container .circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(34, 34, 34, 0.6);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.offer-ride-page-container .circle-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-color: #3b82f6;
+  color: white;
+  transform: scale(1.1);
+}
+
+.offer-ride-page-container .circle-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.offer-ride-page-container .stop-price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.offer-ride-page-container .stop-price-input-wrapper span {
+  position: absolute;
+  left: 10px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.offer-ride-page-container .stop-price-input {
+  width: 80px;
+  padding: 8px 8px 8px 24px;
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  -moz-appearance: textfield;
+}
+
+.offer-ride-page-container .stop-price-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: rgba(34, 34, 34, 0.8);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.offer-ride-page-container .stop-price-input::-webkit-outer-spin-button,
+.offer-ride-page-container .stop-price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.offer-ride-page-container .modal-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+/* Ensure Autocomplete Input styles inside are also scoped */
+.offer-ride-page-container .autocomplete-wrapper .custom-input {
+  /* Inherit scoped input styles */
+  background: rgba(34, 34, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: var(--text-primary);
+  /* ... add padding etc. if needed */
+}
+.offer-ride-page-container .autocomplete-wrapper .suggestions-list {
+  background-color: var(--surface-color); /* Adjust suggestion list background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* ... other scoped suggestion list styles */
+}
+.offer-ride-page-container .autocomplete-wrapper .suggestions-list li:hover {
+   background-color: rgba(255, 255, 255, 0.08); /* Scoped hover */
+}

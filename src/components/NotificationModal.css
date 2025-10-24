@@ -1,0 +1,61 @@
+/* src/components/NotificationModal.css */
+
+.notification-modal-content {
+  background: var(--surface-color);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--surface-color-light);
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+  animation: scaleIn 0.3s ease forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.notification-icon {
+  margin-bottom: 10px;
+}
+
+.notification-icon.success {
+  color: #34d399; /* Green */
+}
+.notification-icon.error {
+  color: var(--danger-color); /* Red */
+}
+.notification-icon.confirm {
+  color: #f59e0b; /* Amber */
+}
+
+.notification-modal-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.notification-actions .custom-button {
+  flex: 1;
+}
+
+/* New style for danger buttons like 'Yes' in a confirmation */
+.custom-button.danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+.custom-button.danger:hover {
+    background-color: #b91c1c; /* Darker red on hover */
+    border-color: #b91c1c;
+}

@@ -1,0 +1,388 @@
+/* src/components/BookingConfirmationModal.css */
+
+.booking-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.booking-modal-content {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.booking-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid var(--surface-color-light);
+}
+
+.booking-modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.booking-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.booking-close-btn:hover {
+    background: rgba(255, 0, 0, 0.444);
+    color: var(--text-primary);
+}
+
+.booking-modal-body {
+    padding: 24px;
+}
+
+.booking-section {
+    margin-bottom: 32px;
+}
+
+.booking-date {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 20px 0;
+}
+
+.booking-route {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid var(--surface-color-light);
+}
+
+.route-point {
+    display: grid;
+    grid-template-columns: 60px 40px 1fr;
+    align-items: center;
+    gap: 16px;
+}
+
+.route-time {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: left;
+}
+
+.route-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.route-icon.origin {
+    background: #10b981;
+}
+
+.route-icon.destination {
+    background: #ef4444;
+}
+
+.route-location {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.route-connector {
+    width: 2px;
+    height: 40px;
+    background: var(--surface-color-light);
+    margin-left: 79px;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 16px 0;
+}
+
+/* Passenger Counter Styles */
+.passenger-counter-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 12px;
+}
+
+.seats-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.seats-info svg {
+    font-size: 1.1rem;
+}
+
+.passenger-counter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface-color);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--surface-color-light);
+}
+
+.counter-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--surface-color-light);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.counter-btn:hover:not(:disabled) {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.counter-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.counter-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 32px;
+    text-align: center;
+}
+
+.seats-warning {
+    margin: 12px 0 0 0;
+    padding: 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.price-summary {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.price-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.payment-method {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.payment-note {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.message-input {
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.message-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.message-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.whatsapp-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    background: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    border-radius: 10px;
+    color: #25d366;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+    background: rgba(37, 211, 102, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+}
+
+.whatsapp-btn svg {
+    font-size: 1.2rem;
+}
+
+.book-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 12px;
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.book-btn:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.book-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .booking-modal-content {
+        max-height: 95vh;
+    }
+
+    .booking-modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .booking-date {
+        font-size: 1.1rem;
+    }
+
+    .route-location {
+        font-size: 1rem;
+    }
+
+    .route-point {
+        grid-template-columns: 50px 35px 1fr;
+        gap: 12px;
+    }
+
+    .route-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .route-connector {
+        margin-left: 67px;
+        height: 35px;
+    }
+
+    .section-title {
+        font-size: 1rem;
+    }
+
+    .price-label {
+        font-size: 1rem;
+    }
+
+    .payment-method {
+        font-size: 1.1rem;
+    }
+
+    .passenger-counter-wrapper {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .passenger-counter {
+        justify-content: center;
+    }
+}

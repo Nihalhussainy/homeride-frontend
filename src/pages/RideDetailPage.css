@@ -1,0 +1,934 @@
+/* src/pages/RideDetailPage.css */
+
+.ride-detail-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.ride-detail-page .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.ride-detail-page .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--text-primary);
+}
+
+.ride-detail-page .page-header h1 svg {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.ride-detail-page .page-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.detail-card {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.detail-card h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--surface-color-light);
+    padding-bottom: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Trip Timeline */
+.trip-timeline {
+    margin-top: 24px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 50px;
+    width: 2px;
+    height: calc(100% - 30px);
+    background: var(--surface-color-light);
+}
+
+.timeline-icon-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.timeline-icon.origin {
+    background: #10b981;
+}
+
+.timeline-icon.destination {
+    background: #ef4444;
+}
+
+.timeline-icon.stop {
+    background: var(--text-secondary);
+    width: 16px;
+    height: 16px;
+    margin-left: 12px;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-location-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.timeline-content h4 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.timeline-time {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1rem;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.timeline-content .address {
+    margin: 4px 0 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.estimated-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.info-block {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--surface-color-light);
+}
+
+.info-block span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.info-block span svg {
+    font-size: 0.95rem;
+}
+
+.info-block p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+}
+
+.driver-note-section {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.driver-note-section h4 {
+    margin: 0 0 10px 0;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.driver-note-section p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* Participants Section */
+.participants-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.participant-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid var(--surface-color-light);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.participant-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+    transform: translateX(6px);
+}
+
+.participant-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.participant-item img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--surface-color-light);
+    transition: all 0.3s ease;
+}
+
+.participant-item:hover img {
+    border-color: var(--primary-color);
+}
+
+.participant-item svg {
+    width: 56px;
+    height: 56px;
+    color: var(--text-secondary);
+}
+
+.participant-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.participant-info .name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    display: block;
+}
+
+.participant-info .badge {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.participant-info .badge svg {
+    width: 14px;
+    height: 14px;
+    color: var(--text-secondary);
+}
+
+.participant-item.driver-item {
+    background: rgba(59, 130, 246, 0.05);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.participant-item.driver-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+}
+
+.participant-item.driver-item img {
+    border-color: var(--primary-color);
+}
+
+.participant-item.driver-item .badge {
+    color: var(--primary-color);
+}
+
+.participant-item.driver-item .badge svg {
+    color: var(--primary-color);
+}
+
+/* Driver Contact Section */
+.driver-contact-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid var(--surface-color-light);
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.driver-contact-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+.driver-contact-avatar {
+    flex-shrink: 0;
+}
+
+.driver-contact-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--surface-color-light);
+    transition: all 0.3s ease;
+}
+
+.driver-contact-card:hover .driver-contact-avatar img {
+    border-color: var(--primary-color);
+}
+
+.driver-contact-avatar svg {
+    width: 60px;
+    height: 60px;
+    color: var(--text-secondary);
+}
+
+.driver-contact-info {
+    flex: 1;
+}
+
+.driver-contact-info h4 {
+    margin: 0 0 6px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.driver-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.driver-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Driver Contact Section - Simplified */
+.phone-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    background: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    border-radius: 10px;
+    color: #25d366;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.phone-btn:hover {
+    background: rgba(37, 211, 102, 0.2)!important;
+    transform: translateY(-2px)!important;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2)!important;
+}
+
+.phone-btn svg {
+    font-size: 1.1rem;
+}
+
+/* Price Card - Simplified */
+.price-card {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-color-light);
+    position: static;
+    top: 20px;
+}
+
+.price-card h3 {
+    border-color: var(--surface-color-light);
+}
+
+.price-display {
+    text-align: center;
+    padding: 20px;
+    margin: 16px 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+}
+
+.price-label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.price-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.action-button-container {
+    margin-top: 16px;
+}
+
+.action-button-container .custom-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.status-tag {
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.status-tag.joined {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-tag.full {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Chat Card */
+.chat-card {
+    margin-top: 20px;
+}
+
+.open-chat-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    background: rgba(59, 130, 246, 0.1)!important;
+    border: 1px solid rgba(59, 130, 246, 0.3)!important;
+    border-radius: 10px;
+    color: var(--primary-color)!important;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.open-chat-btn:hover {
+    background: rgba(59, 130, 246, 0.2)!important;
+    transform: translateY(-2px)!important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2)!important;
+}
+
+.open-chat-btn svg {
+    font-size: 1.1rem;
+}
+
+/* Chat Modal */
+.chat-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--surface-color-light);
+}
+
+.chat-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-chat-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.close-chat-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.chat-modal-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 0;
+}
+
+.chat-modal-body .chat-box-container {
+    height: 500px;
+    border-radius: 0;
+    border: none;
+}
+
+.chat-container-wrapper {
+    margin-top: 20px;
+}
+
+.chat-container-wrapper .chat-box-container {
+    height: 400px;
+    margin-top: 0;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-sidebar {
+        order: -1;
+    }
+    
+    .price-card {
+        position: relative;
+        top: 0;
+    }
+    
+    .chat-modal-content {
+        max-height: 90vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .participants-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-buttons {
+        flex-direction: column;
+    }
+    
+    .contact-btn {
+        width: 100%;
+    }
+    
+    .price-value {
+        font-size: 2rem;
+    }
+    
+    .chat-modal-overlay {
+        padding: 10px;
+    }
+    
+    .chat-modal-body .chat-box-container {
+        height: 400px;
+    }
+}-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.chat-modal-content {
+    background: var(--surface-color);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+/* Add these new rules to src/pages/RideDetailPage.css */
+
+/* Style for the moved header */
+.detail-main-content .page-header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.detail-main-content .page-header h1,
+.detail-main-content .page-header p {
+    justify-content: flex-start;
+}
+
+/* Style for the chat notification badge */
+.open-chat-btn {
+    position: relative;
+}
+
+.chat-notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--danger-color);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--surface-color);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    animation: pulse-badge 1.5s infinite;
+}
+
+@keyframes pulse-badge {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+/* Add these new styles to src/pages/RideDetailPage.css */
+
+/* .timeline-item.interactive .timeline-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeline-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.timeline-actions button {
+  background: var(--surface-color-light);
+  border: 1px solid var(--surface-color-light);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.timeline-actions button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.timeline-actions button.selected {
+  color: white;
+}
+
+.timeline-actions button.pickup-btn.selected {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.timeline-actions button.dropoff-btn.selected {
+  background-color: #ef4444;
+  border-color: #ef4444;
+} */
+
+.stop-circle {
+    width: 10px;
+    height: 10px;
+    background: var(--text-secondary);
+    border-radius: 50%;
+}
+
+.price-display .segment-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    display: block;
+}
+/* Add these new styles to src/pages/RideDetailPage.css */
+
+.overview-point {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.overview-connector {
+  grid-column: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 60px;
+}
+
+.overview-connector::before {
+  content: '';
+  width: 2px;
+  height: 100%;
+  background: var(--surface-color-light);
+}
+
+.duration-pill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface-color);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--surface-color-light);
+}
+
+.overview-point-details {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+}
+
+.point-city {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.point-address {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.overview-stops {
+    padding-left: 18px; /* Align with the connector line */
+    margin: 10px 0;
+}
+
+.stop-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+}
+
+.stop-icon {
+    width: 8px;
+    height: 8px;
+    background: var(--text-secondary);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.stop-name {
+    font-weight: 500;
+}
+/* Add these styles to the END of your existing RideDetailPage.css file */
+
+/* Booking Details Display Styles */
+.booking-details-display {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.booking-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 10px;
+    color: #10b981;
+    font-weight: 600;
+    font-size: 0.95rem;
+    width: fit-content;
+}
+
+.booking-status-badge svg {
+    font-size: 1.1rem;
+}
+
+.booking-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--surface-color-light);
+    border-radius: 10px;
+}
+
+.booking-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .booking-info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .booking-status-badge {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+    }
+}
+
+/* Report Card */
+.report-card {
+    margin-top: 20px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.02);
+}
+
+.report-card h3 {
+    color: #ef4444;
+    border-bottom-color: rgba(239, 68, 68, 0.2);
+}
+
+.report-card h3 svg {
+    color: #ef4444;
+    font-size: 1.2rem;
+}

@@ -1,0 +1,61 @@
+/* src/index.css */
+
+/* FONT: Manrope (Keeping this as it's very suitable for a clean look) */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* NEW PALETTE: Minimalist Black & White, inspired by the reference */
+  --primary-color: #ffffff; /* White for primary buttons/actions */
+  --primary-hover: #dddddd; /* Light gray for hover */
+  --danger-color: #ef4444;
+  --background-color: #000000; /* Pure Black */
+  --surface-color: #111111; /* Very Dark Gray for cards */
+  --surface-color-light: #222222; /* Lighter Gray for inputs/borders */
+  --text-primary: #ffffff; /* Pure White */
+  --text-secondary: #888888; /* Medium Gray for secondary text */
+
+  /* UI Dimensions */
+  --border-radius: 0.5rem;
+  --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  --input-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+body {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  overflow-x: hidden; /* Prevent horizontal scroll from gradient */
+
+  /* NEW GRAPHIC: Subtle Aurora Gradient Background */
+  position: relative;
+  background-image: 
+    radial-gradient(
+      ellipse 60% 80% at 15% -20%,
+      rgba(100, 100, 180, 0.25), /* Subtle purple glow */
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 70% at 85% 115%,
+      rgba(0, 255, 153, 0.15), /* Subtle mint green glow */
+      transparent
+    );
+}
+
+/* Global scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-color-light);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+

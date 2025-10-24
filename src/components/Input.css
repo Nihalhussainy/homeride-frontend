@@ -1,0 +1,46 @@
+/* src/components/Input.css */
+
+.input-wrapper {
+  width: 100%;
+  margin-bottom: 16px;
+  position: relative; /* This is crucial for positioning the icon */
+}
+
+.custom-input {
+  width: 100%;
+  padding: 14px;
+  /* Add extra padding on the right for the icon */
+  padding-right: 45px; 
+  background-color: var(--surface-color);
+  border: 1px solid var(--surface-color-light);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  color: var(--text-primary);
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.custom-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: var(--input-shadow);
+}
+
+/* NEW: Styles for the eye icon */
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.password-toggle-icon:hover {
+  color: var(--text-primary);
+}

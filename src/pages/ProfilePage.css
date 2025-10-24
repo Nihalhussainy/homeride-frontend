@@ -1,0 +1,53 @@
+/* ProfilePage.css (or add to App.css) */
+
+/* Base transition for smoothness */
+.profile-action-button {
+    transition: all 0.2s ease-out;
+}
+
+/* Update Picture Button Hover */
+.update-picture-button:hover {
+  background: #4b5563; /* Slightly lighter gray */
+  border-color: var(--text-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Remove Picture Button Hover */
+.remove-picture-button:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444; /* var(--danger-color) */
+  color: #fca5a5; /* Lighter red */
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.2);
+}
+
+/* Cancel Edit Button Hover */
+.cancel-edit-button:hover {
+  background: var(--surface-color-light);
+  border-color: var(--text-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Save Changes Button Hover */
+.save-changes-button:hover {
+  background: linear-gradient(135deg, #4b92f7 0%, #9c6df7 100%); /* Lighter gradient */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+/* Optional: Add focus-visible styles for accessibility */
+.profile-action-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+.remove-picture-button:focus-visible {
+     outline-color: var(--danger-color);
+}
+.cancel-edit-button:focus-visible {
+    outline-color: var(--text-secondary);
+}
+
+/* --- Keep other styles for ProfilePage if they exist --- */
+/* For example, styles related to .profile-info-grid, .info-block, etc. */

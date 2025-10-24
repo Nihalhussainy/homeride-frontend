@@ -1,0 +1,286 @@
+/* src/components/Navbar.css - Final Version */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2.5rem;
+  background-color: #000000fa;
+  height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.navbar-scrolled {
+  background-color: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+/* Brand / Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.navbar-brand-icon {
+  color: var(--primary-color); /* Use white for the icon */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar-brand:hover .navbar-brand-icon {
+  transform: rotate(-15deg) scale(1.1);
+}
+
+.navbar-brand h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* Main Navigation Links (Pill Container) */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  background-color: var(--surface-color);
+  border: 1px solid var(--surface-color-light);
+  border-radius: 30px;
+  padding: 6px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: var(--text-secondary); /* Default text color */
+  font-size: 0.95rem;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease; /* Transition only color */
+  padding: 10px 20px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.navbar-links a:hover {
+  color: var(--text-primary); /* Text becomes white on hover */
+}
+
+/* Style for the ACTIVE link in the pill */
+.navbar-links a.active {
+  color: var(--text-primary); /* Text becomes white when active */
+  /* NO background color change */
+}
+
+/* Ensure icons also change color correctly on active in the pill */
+.navbar-links a.active svg {
+  color: var(--text-primary); /* Icon becomes white when active */
+}
+
+
+/* User Section (Right side) */
+.navbar-user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Adjust gap as needed */
+}
+
+/* Styling for the Offer Ride Link (to look like other links) */
+.navbar-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px; /* Consistent padding */
+  color: var(--text-secondary);
+  font-size: 0.95rem; /* Match pill link font size */
+  font-weight: 600; /* Match pill link font weight */
+  text-decoration: none;
+  border-radius: 20px; /* Rounded corners */
+  transition: color 0.2s ease, background-color 0.2s ease;
+  margin-right: 0.5rem; /* Space before notification */
+}
+
+.navbar-action-link:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-color-light); /* Subtle hover background */
+}
+
+/* Auth links for logged-out users */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.auth-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+  color: var(--text-primary);
+}
+
+.auth-links .register-btn {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-links .register-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); /* Adjusted shadow */
+    color: #000000; /* Ensure text remains black */
+}
+
+/* User Menu for logged-in users */
+.user-menu-container {
+  position: relative;
+}
+
+.user-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 4px; /* Adjust padding if needed */
+  border-radius: 50%;
+  transition: background-color 0.2s, transform 0.2s;
+  /* Removed fixed size */
+}
+
+.user-menu-button:hover {
+  background-color: var(--surface-color-light);
+  transform: scale(1.1);
+}
+
+/* Style for BOTH image avatar and placeholder icon */
+.user-avatar,
+.user-avatar-placeholder {
+    width: 38px;  /* Increased size */
+    height: 38px; /* Increased size */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--surface-color-light);
+    padding: 2px;
+    background-color: var(--surface-color);
+    display: flex; /* Added for placeholder alignment */
+    align-items: center; /* Added for placeholder alignment */
+    justify-content: center; /* Added for placeholder alignment */
+    color: var(--text-secondary); /* Color for placeholder */
+    font-size: 20px; /* Adjust icon size within placeholder */
+}
+
+
+.user-menu-button:hover .user-avatar,
+.user-menu-button:hover .user-avatar-placeholder {
+  border-color: var(--primary-color);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  background-color: #1a1a1a;
+  border: 1px solid var(--surface-color-light);
+  border-radius: var(--border-radius);
+  width: 240px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  animation: dropdown-in 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  padding: 8px;
+  transform-origin: top right;
+}
+
+@keyframes dropdown-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--surface-color-light);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.dropdown-header strong {
+  color: var(--text-primary);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--surface-color-light);
+  color: var(--text-primary);
+}
+
+.dropdown-item.logout {
+  margin-top: 8px;
+  border-top: 1px solid var(--surface-color-light);
+  color: var(--danger-color);
+}
+
+.dropdown-item.logout:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Hide elements on smaller screens for a cleaner mobile view */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 1.5rem;
+    }
+    .navbar-links {
+        display: none; /* Hide the pill nav on mobile */
+    }
+    .user-name-nav {
+        display: none;
+    }
+    .navbar-action-link { /* Hide Offer Ride link on mobile */
+        display: none;
+    }
+}
