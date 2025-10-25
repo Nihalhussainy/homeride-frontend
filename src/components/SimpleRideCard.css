@@ -278,3 +278,78 @@
       font-size: 1.05rem;
     }
 }
+
+/* Add these styles to src/components/SimpleRideCard.css */
+
+/* Grid area for the new status/seats container */
+.status-container {
+  grid-area: 5 / 3; /* Place in the third column, bottom row */
+  justify-self: center; /* Center horizontally */
+  align-self: center; /* Center vertically */
+}
+
+/* Base styles for status tags */
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Departed status tag style */
+.status-tag.departed {
+  background-color: rgba(245, 158, 11, 0.1); /* Amber background */
+  color: #f59e0b; /* Amber text */
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+/* Completed status tag style */
+.status-tag.completed {
+  background-color: rgba(16, 185, 129, 0.1); /* Green background */
+  color: #10b981; /* Green text */
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* --- Optional: Dim the card slightly when departed/completed --- */
+.simple-ride-card.status-departed,
+.simple-ride-card.status-completed {
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+.simple-ride-card.status-departed:hover,
+.simple-ride-card.status-completed:hover {
+  opacity: 1; /* Restore opacity on hover */
+}
+
+/* --- Adjustments for Responsive Design --- */
+@media (max-width: 650px) {
+  /* Make status/seats container span full width below driver */
+  .status-container {
+      grid-area: 7 / 1 / 8 / 3; /* Span full width */
+      margin-top: 12px;
+      justify-self: flex-start; /* Align left */
+      width: fit-content; /* Adjust width */
+  }
+
+  /* Keep existing seats container styles within status container */
+  .status-container .seats-container {
+     margin-top: 0;
+     justify-self: flex-start;
+     width: fit-content;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Keep status/seats aligned left */
+  .status-container {
+    justify-self: flex-start;
+  }
+   .status-container .seats-container {
+     justify-self: flex-start;
+   }
+}

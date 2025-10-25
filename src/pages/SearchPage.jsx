@@ -523,14 +523,35 @@ function SearchPage() {
         params: params,
         headers: { Authorization: `Bearer ${token}` },
       });
-      setRides(response.data);
+
+      // --- NEW FILTERING LOGIC ---
+      const now = new Date();
+      const twoHoursInMillis = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+      const recentRides = response.data.filter(ride => {
+        try {
+          const departureTime = new Date(ride.travelDateTime);
+          const cutoffTime = new Date(departureTime.getTime() + twoHoursInMillis); // Departure time + 2 hours
+
+          // Keep the ride if the current time is BEFORE the cutoff time
+          // This includes upcoming rides and rides departed within the last 2 hours
+          return now < cutoffTime;
+        } catch (e) {
+          console.error("Error parsing ride date:", ride.travelDateTime, e);
+          return false; // Exclude rides with invalid dates
+        }
+      });
+      // --- END NEW FILTERING LOGIC ---
+
+      setRides(recentRides); // Set state with the filtered rides
+
     } catch (error) {
       console.error('Failed to fetch search results:', error);
-      setRides([]);
+      setRides([]); // Set to empty array on error
     } finally {
       setIsLoading(false);
     }
-  }, [navigate]);
+  }, [navigate]); // navigate is a dependency
 
   useEffect(() => {
     const hasSearchParams = searchParams.get('origin') || searchParams.get('destination');
