@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Stomp } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import axios from 'axios';
 import Button from './Button';
 import Input from './Input';
 import { FiSend, FiUsers } from 'react-icons/fi';
 import './ChatBox.css';
 import { FaUserCircle } from 'react-icons/fa';
+import { Client } from '@stomp/stompjs'; // Import Client instead of Stomp
 
 function ChatBox({ rideId, currentUser, participants }) {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
-    const [stompClient, setStompClient] = useState(null);
+    const [stompClient, setStompClient] = useState(null); // Will hold the Client instance
     const [isConnected, setIsConnected] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const messagesEndRef = useRef(null);
-    const reconnectTimeoutRef = useRef(null);
-    
+    const clientRef = useRef(null); // Ref to hold the client for cleanup
+    const reconnectTimeoutRef = useRef(null); // Keep ref for potential manual reconnect logic if needed
+
     // Fetch chat history on component mount
     useEffect(() => {
         const fetchChatHistory = async () => {
@@ -39,74 +39,97 @@ function ChatBox({ rideId, currentUser, participants }) {
             fetchChatHistory();
         }
     }, [rideId]);
-    
-    // Set up WebSocket connection with authentication
+
+    // Set up WebSocket connection using Client
     useEffect(() => {
         if (!rideId || !currentUser) return;
 
         const connectWebSocket = () => {
             const token = localStorage.getItem('token');
-            const socket = new SockJS(`${import.meta.env.VITE_API_URL}`/ws);
-            const client = Stomp.over(socket);
+            // Convert http(s) URL to ws(s) for WebSocket connection
+            const wsUrl = `${import.meta.env.VITE_API_URL}/ws`.replace(/^http/, 'ws');
 
-            // Add authentication header
-            const headers = {
-                'Authorization': `Bearer ${token}`
+            // Create and configure the Stomp Client
+            const client = new Client({
+                brokerURL: wsUrl,
+                connectHeaders: {
+                    Authorization: `Bearer ${token}`, // Pass token for authentication
+                },
+                reconnectDelay: 5000, // Automatically try to reconnect every 5 seconds
+                heartbeatIncoming: 4000,
+                heartbeatOutgoing: 4000,
+                // debug: (str) => { console.log('STOMP DEBUG: ' + str); } // Optional: Uncomment for detailed logs
+            });
+
+            // Handle successful connection
+            client.onConnect = (frame) => {
+                console.log('Connected via STOMP Client:', frame);
+                setStompClient(client); // Store the active client in state
+                clientRef.current = client; // Also store in ref for cleanup
+                setIsConnected(true);
+
+                // Subscribe to the ride topic
+                client.subscribe(`/topic/ride.${rideId}`, (message) => {
+                    const receivedMessage = JSON.parse(message.body);
+                    // Add message to state, preventing duplicates
+                    setMessages(prev => {
+                        const messageExists = prev.some(msg =>
+                            msg.id === receivedMessage.id ||
+                            (msg.content === receivedMessage.content &&
+                             msg.senderEmail === receivedMessage.senderEmail &&
+                             Math.abs(new Date(msg.timestamp) - new Date(receivedMessage.timestamp)) < 1500) // Tolerance for timing
+                        );
+                        if (messageExists) return prev;
+                        return [...prev, receivedMessage];
+                    });
+                });
             };
 
-            client.connect(headers, 
-                (frame) => {
-                    console.log('Connected to WebSocket:', frame);
-                    setStompClient(client);
-                    setIsConnected(true);
+            // Handle STOMP protocol errors
+            client.onStompError = (frame) => {
+                console.error('Broker reported error: ' + frame.headers['message']);
+                console.error('Additional details: ' + frame.body);
+                setIsConnected(false);
+                // Reconnect is handled automatically by client config
+            };
 
-                    // Subscribe to the ride's group chat topic
-                    client.subscribe(`/topic/ride.${rideId}`, (message) => {
-                        const receivedMessage = JSON.parse(message.body);
-                        
-                        // Add message to state (backend handles deduplication by saving first)
-                        setMessages(prev => {
-                            // Check if message already exists to prevent duplicates
-                            const messageExists = prev.some(msg => 
-                                msg.id === receivedMessage.id || 
-                                (msg.content === receivedMessage.content && 
-                                 msg.senderEmail === receivedMessage.senderEmail &&
-                                 Math.abs(new Date(msg.timestamp) - new Date(receivedMessage.timestamp)) < 1000)
-                            );
-                            
-                            if (messageExists) {
-                                return prev;
-                            }
-                            
-                            return [...prev, receivedMessage];
-                        });
-                    });
-                },
-                (error) => {
-                    console.error('WebSocket connection error:', error);
-                    setIsConnected(false);
-                    setStompClient(null);
-                    
-                    // Attempt to reconnect after 3 seconds
-                    if (reconnectTimeoutRef.current) {
-                        clearTimeout(reconnectTimeoutRef.current);
-                    }
-                    reconnectTimeoutRef.current = setTimeout(connectWebSocket, 3000);
-                }
-            );
+            // Handle WebSocket level errors
+            client.onWebSocketError = (error) => {
+                console.error('WebSocket Error:', error);
+                setIsConnected(false);
+                // Reconnect is handled automatically by client config
+            };
+
+            // Handle disconnection
+            client.onDisconnect = () => {
+                 console.log('STOMP Client Disconnected');
+                 setIsConnected(false);
+                 setStompClient(null);
+                 clientRef.current = null;
+                 // Reconnect is handled automatically by client config
+            };
+
+            // Activate the client to initiate connection
+            client.activate();
+
+            // Store client in ref immediately for potential cleanup
+            clientRef.current = client;
         };
 
+        // Call connectWebSocket
         connectWebSocket();
 
+        // Cleanup function: Deactivate client on component unmount
         return () => {
-            if (reconnectTimeoutRef.current) {
+            if (clientRef.current && clientRef.current.active) {
+                clientRef.current.deactivate();
+                console.log('STOMP Client deactivated on unmount');
+            }
+            if (reconnectTimeoutRef.current) { // Clear any potential manual timeout
                 clearTimeout(reconnectTimeoutRef.current);
             }
-            if (stompClient && stompClient.connected) {
-                stompClient.disconnect();
-            }
         };
-    }, [rideId, currentUser]);
+    }, [rideId, currentUser]); // Rerun effect if rideId or currentUser changes
 
     // Auto-scroll to bottom when new messages arrive
     useEffect(() => {
@@ -115,16 +138,16 @@ function ChatBox({ rideId, currentUser, participants }) {
 
     const handleSendMessage = (event) => {
         event.preventDefault();
-        
         const trimmedMessage = inputMessage.trim();
-        if (!stompClient || !isConnected || !trimmedMessage) return;
-        
-        // Validate message length
+
+        // Use stompClient from state and check its 'connected' property
+        if (!stompClient || !stompClient.connected || !trimmedMessage) return;
+
         if (trimmedMessage.length > 500) {
             alert('Message is too long. Please keep it under 500 characters.');
             return;
         }
-        
+
         const messagePayload = {
             senderName: currentUser.name,
             senderEmail: currentUser.email,
@@ -133,9 +156,13 @@ function ChatBox({ rideId, currentUser, participants }) {
             rideId: rideId,
             type: 'GROUP'
         };
-        
+
         try {
-            stompClient.send(`/app/chat.sendMessage`, {}, JSON.stringify(messagePayload));
+            // Use client.publish instead of client.send
+            stompClient.publish({
+                destination: `/app/chat.sendMessage`, // STOMP destination
+                body: JSON.stringify(messagePayload), // Message body must be a string
+            });
             setInputMessage('');
         } catch (error) {
             console.error('Failed to send message:', error);
@@ -143,11 +170,12 @@ function ChatBox({ rideId, currentUser, participants }) {
         }
     };
 
+
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
         const now = new Date();
         const diffInHours = (now - date) / (1000 * 60 * 60);
-        
+
         if (diffInHours < 24) {
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         } else {
@@ -157,11 +185,12 @@ function ChatBox({ rideId, currentUser, participants }) {
     };
 
     const getProfilePictureUrl = (senderEmail) => {
-        const message = messages.find(msg => msg.senderEmail === senderEmail);
+        // First check current message list for potentially updated URL
+        const message = messages.findLast(msg => msg.senderEmail === senderEmail);
         if (message && message.senderProfilePictureUrl) {
             return message.senderProfilePictureUrl;
         }
-        
+        // Fallback to participant list
         const participant = participants.find(p => p.email === senderEmail);
         return participant?.profilePictureUrl || null;
     };
@@ -182,9 +211,8 @@ function ChatBox({ rideId, currentUser, participants }) {
         );
     }
 
-    // Keep track of the last sender to group messages
     let lastSenderEmail = null;
-    
+
     return (
         <div className="chat-box-container">
             <div className="chat-header">
@@ -197,7 +225,7 @@ function ChatBox({ rideId, currentUser, participants }) {
                     )}
                 </div>
             </div>
-            
+
             <div className="chat-messages">
                 {messages.length === 0 ? (
                     <div className="empty-chat">
@@ -209,34 +237,51 @@ function ChatBox({ rideId, currentUser, participants }) {
                         const isMyMessage = msg.senderEmail === currentUser.email;
                         const senderName = getSenderName(msg.senderEmail);
                         const profilePictureUrl = getProfilePictureUrl(msg.senderEmail);
-                        
-                        // Check if the sender is the same as the previous message
-                        const showAvatarAndName = msg.senderEmail !== lastSenderEmail;
-                        lastSenderEmail = msg.senderEmail;
+
+                        const showAvatarAndName = !isMyMessage && msg.senderEmail !== lastSenderEmail;
+                        if (!isMyMessage) {
+                             lastSenderEmail = msg.senderEmail;
+                        } else {
+                            // Reset last sender if it's my message to ensure next 'other' message shows avatar
+                            lastSenderEmail = null;
+                        }
+
 
                         return (
-                            <div 
-                                key={msg.id || `${msg.senderEmail}-${msg.timestamp}-${index}`}
+                            <div
+                                key={msg.id || `${msg.senderEmail}-${msg.timestamp}-${index}`} // Use ID if available
                                 className={`message-bubble-wrapper ${isMyMessage ? 'my-message' : 'other-message'}`}
                             >
                                 <div className="message-content-box">
                                     {/* Conditionally render avatar for other messages */}
                                     {!isMyMessage && (
-                                        <div 
+                                        <div
                                             className={`message-avatar ${showAvatarAndName ? '' : 'hidden-avatar'}`}
                                             style={{ cursor: 'default' }}
                                         >
                                             {profilePictureUrl ? (
-                                                <img 
-                                                    src={profilePictureUrl} 
+                                                <img
+                                                    src={profilePictureUrl}
                                                     alt={senderName}
                                                     onError={(e) => {
+                                                        // Fallback icon if image fails
                                                         e.target.style.display = 'none';
+                                                        const parent = e.target.parentNode;
+                                                        if (parent && !parent.querySelector('.participant-icon')) {
+                                                            const icon = document.createElement('span');
+                                                            // You might need to import FaUserCircle and render it properly here
+                                                            // For simplicity, just adding text
+                                                            icon.innerHTML = '<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" class="participant-icon" height="32" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path></svg>';
+                                                            icon.className = 'participant-icon';
+                                                            icon.style.fontSize = '32px'; // Adjust size
+                                                            icon.style.color = 'var(--text-secondary)'; // Adjust color
+                                                            parent.appendChild(icon);
+                                                        }
                                                     }}
                                                 />
                                             ) : (
-                                                <FaUserCircle 
-                                                    size={32} 
+                                                <FaUserCircle
+                                                    size={32}
                                                     className="participant-icon"
                                                 />
                                             )}
@@ -245,7 +290,7 @@ function ChatBox({ rideId, currentUser, participants }) {
 
                                     <div className="message-text-bubble">
                                         {/* Conditionally render sender name for other messages */}
-                                        {!isMyMessage && showAvatarAndName && (
+                                        {showAvatarAndName && (
                                             <span className="message-sender-name">
                                                 {senderName}
                                             </span>
@@ -262,7 +307,7 @@ function ChatBox({ rideId, currentUser, participants }) {
                 )}
                 <div ref={messagesEndRef} />
             </div>
-            
+
             <form onSubmit={handleSendMessage} className="chat-input-form">
                 <Input
                     type="text"

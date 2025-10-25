@@ -700,7 +700,7 @@ function OfferRidePage() {
                     <div className="step-content">
                         <h2>Add stopovers (Optional)</h2>
                         <p style={{textAlign: 'center', marginTop: '-20px', marginBottom: '20px', color: 'var(--text-secondary)', fontSize: '0.9rem'}}>
-                            Add cities or specific points where you can pick up/drop off passengers.
+                            Add cities or specific points where you can pick up/drop off passengers in order.
                         </p>
                         {formData.stops.map((stop, index) => (
                             <div key={index} className="stop-input-group" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '8px', border: '1px solid var(--surface-color-light)', padding: '16px', borderRadius: '12px', marginBottom: '16px' }}>
@@ -708,7 +708,7 @@ function OfferRidePage() {
                                     <div style={{flex: 1}}>
                                         <label style={{display:'block', marginBottom:'8px', fontSize:'0.9rem', color:'var(--text-secondary)'}}>Stop {index + 1} City (Optional)</label>
                                         <AutocompleteInput
-                                            placeholder={`e.g., Gudur`}
+                                            placeholder={`Enter city name`}
                                             value={stop.city}
                                             onInputChange={(value) => handleStopChange(index, 'city', value)}
                                             onSuggestionSelect={(value) => handleStopChange(index, 'city', value)}

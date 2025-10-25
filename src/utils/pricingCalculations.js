@@ -47,7 +47,7 @@ export const getTotalPriceRange = (totalDistanceKm) => {
     let maxPrice = roundToNearest10(recommended * PRICING_CONSTANTS.TOTAL_MAX_FACTOR);
     maxPrice = Math.max(minPrice + PRICING_CONSTANTS.MIN_RANGE_PRICE, maxPrice);
 
-    console.log(`Total Price Range for ${totalDistanceKm}km: Min=${minPrice}, Rec=${recommended}, Max=${maxPrice}`);
+   // console.log(`Total Price Range for ${totalDistanceKm}km: Min=${minPrice}, Rec=${recommended}, Max=${maxPrice}`);
     return { recommendedPrice: recommended, minPrice, maxPrice };
 };
 
