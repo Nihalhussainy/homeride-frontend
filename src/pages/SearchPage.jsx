@@ -526,7 +526,7 @@ function SearchPage() {
 
       // --- NEW FILTERING LOGIC ---
       const now = new Date();
-      const twoHoursInMillis = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+      const twoHoursInMillis = 1 * 60 * 60 * 1000; // 2 hours in milliseconds
 
       const recentRides = response.data.filter(ride => {
         try {
