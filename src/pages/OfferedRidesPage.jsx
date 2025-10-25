@@ -25,7 +25,7 @@ function OfferedRidesPage() {
         setIsLoading(true);
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get('http://localhost:8080/api/rides', {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/rides`, {
                 headers: { 'Authorization': `Bearer ${token}` },
                 params: { rideType: 'OFFERED' }
             });

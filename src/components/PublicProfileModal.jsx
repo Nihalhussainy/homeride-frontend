@@ -29,7 +29,7 @@ function PublicProfileModal({ userId, onClose }) {
     const fetchProfileData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/api/employees/${userId}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/employees/${userId}`);
         setProfile(response.data);
       } catch (error) {
         console.error('Failed to fetch profile data:', error);

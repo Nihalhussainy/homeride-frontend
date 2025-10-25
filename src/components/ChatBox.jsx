@@ -23,7 +23,7 @@ function ChatBox({ rideId, currentUser, participants }) {
             const token = localStorage.getItem('token');
             try {
                 setIsLoading(true);
-                const response = await axios.get(`http://localhost:8080/api/chat/history/${rideId}`, {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/history/${rideId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setMessages(response.data || []);
@@ -46,7 +46,7 @@ function ChatBox({ rideId, currentUser, participants }) {
 
         const connectWebSocket = () => {
             const token = localStorage.getItem('token');
-            const socket = new SockJS('http://localhost:8080/ws');
+            const socket = new SockJS(`${import.meta.env.VITE_API_URL}`/ws);
             const client = Stomp.over(socket);
 
             // Add authentication header

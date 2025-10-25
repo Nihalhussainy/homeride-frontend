@@ -50,8 +50,8 @@ function DashboardPage() {
       const config = { headers: { 'Authorization': `Bearer ${token}` } };
       
       const [userResponse, myRidesResponse] = await Promise.all([
-        axios.get('http://localhost:8080/api/employees/me', config),
-        axios.get('http://localhost:8080/api/rides/my-rides', config)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/employees/me`, config),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/rides/my-rides`, config)
       ]);
       
       setCurrentUser(userResponse.data);

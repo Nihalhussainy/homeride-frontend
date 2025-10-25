@@ -102,8 +102,8 @@ function RideDetailPage() {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
             const [rideResponse, userResponse] = await Promise.all([
-                axios.get(`http://localhost:8080/api/rides/${id}`, config),
-                axios.get(`http://localhost:8080/api/employees/me`, config),
+                axios.get(`${import.meta.env.VITE_API_URL}/api/rides/${id}`, config),
+                axios.get(`${import.meta.env.VITE_API_URL}/api/employees/me`, config),
             ]);
             const rideData = rideResponse.data;
             setRide(rideData);
@@ -345,7 +345,7 @@ for (let i = 0; i < routePoints.length; i++) {
                 price: segmentPrice * passengerCount,
                 numberOfSeats: passengerCount
             };
-            await axios.post(`http://localhost:8080/api/rides/${id}/join`, body, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/rides/${id}/join`, body, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const seatText = passengerCount > 1 ? `${passengerCount} seats` : 'your seat';
@@ -366,12 +366,12 @@ for (let i = 0; i < routePoints.length; i++) {
         
         try {
             if (isUserDriver) {
-                await axios.post(`http://localhost:8080/api/rides/${id}/cancel-driver`, null, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/rides/${id}/cancel-driver`, null, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 showNotification('Ride has been cancelled. All passengers have been notified.', 'success');
             } else {
-                await axios.post(`http://localhost:8080/api/rides/${id}/cancel-passenger`, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/rides/${id}/cancel-passenger`, {
                     reason: reason
                 }, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -399,7 +399,7 @@ for (let i = 0; i < routePoints.length; i++) {
                 message: `RIDE REPORT\n\nRide: ${reportData.rideInfo.from} → ${reportData.rideInfo.to}\nDate: ${reportData.rideInfo.date}\nReason: ${reportData.reason}\n\nDetails:\n${reportData.description}`
             };
 
-            await axios.post('http://localhost:8080/api/contact/send', emailContent);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/contact/send`, emailContent);
 
             showNotification('Thank you for reporting this ride. Our team will review it shortly.', 'success');
             setShowReportModal(false);

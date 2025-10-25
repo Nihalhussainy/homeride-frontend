@@ -29,13 +29,13 @@ function PublicProfilePage() {
             setIsLoading(true);
             try {
                 // Fetch public profile data
-                const profileResponse = await axios.get(`http://localhost:8080/api/employees/${id}`);
+                const profileResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/employees/${id}`);
                 console.log('Public Profile Data:', profileResponse.data);
                 console.log('Phone Number:', profileResponse.data.phoneNumber);
                 setProfile(profileResponse.data);
 
                 // Fetch ratings received by this user
-                const ratingsResponse = await axios.get(`http://localhost:8080/api/ratings/my-ratings`, {
+                const ratingsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/ratings/my-ratings`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 const filteredRatings = ratingsResponse.data.filter(r => r.ratee.id === profileResponse.data.id);
@@ -47,7 +47,7 @@ function PublicProfilePage() {
                 }
                 
                 // Fetch ride history to get total rides. This endpoint needs to be secured so we use the token.
-                const ridesResponse = await axios.get(`http://localhost:8080/api/rides/my-rides`, {
+                const ridesResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/rides/my-rides`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 const userRides = ridesResponse.data.filter(ride => 

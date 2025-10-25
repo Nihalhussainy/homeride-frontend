@@ -434,7 +434,7 @@ function OfferRidePage() {
             const validStops = formData.stops.filter(stop => stop.point && stop.point.trim());
             validStops.forEach(stop => params.append('stops', stop.point));
 
-            const response = await axios.get(`http://localhost:8080/api/rides/travel-info?${params.toString()}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/rides/travel-info?${params.toString()}`);
             const { distanceInKm, durationInMinutes, polyline, segmentDistances } = response.data;
 
             const numberOfSegments = validStops.length + 1;
@@ -446,7 +446,7 @@ function OfferRidePage() {
                     destination: formData.destinationPoint,
                 });
                 const directResponse = await axios.get(
-                    `http://localhost:8080/api/rides/travel-info?${directParams.toString()}`
+                    `${import.meta.env.VITE_API_URL}/api/rides/travel-info?${directParams.toString()}`
                 );
                 directDistance = directResponse.data.distanceInKm;
                 console.log(`Direct distance (pricing): ${directDistance}km, Actual route: ${distanceInKm}km`);
@@ -565,7 +565,7 @@ function OfferRidePage() {
         const token = localStorage.getItem('token');
 
         try {
-            await axios.post('http://localhost:8080/api/rides/offer', finalData, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/rides/offer`, finalData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             showNotification('Your ride has been published successfully!', 'success');

@@ -37,7 +37,7 @@ function AutocompleteInput({ value, onInputChange, onSuggestionSelect, placehold
         setIsSearching(true);
         const searchQuery = searchContext ? `${query}, ${searchContext}` : query;
         try {
-            const response = await axios.get(`http://localhost:8080/api/places/autocomplete?query=${searchQuery}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/places/autocomplete?query=${searchQuery}`);
             const data = response.data || [];
             
             cache.current[query] = data; // Save the new results to the cache

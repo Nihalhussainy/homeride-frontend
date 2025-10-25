@@ -138,7 +138,7 @@ function HomePage() {
     const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
 
     try {
-      const response = await axios.get('http://localhost:8080/api/admin/stats', config);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/stats`, config);
       setStats(prev => ({
         ...prev,
         totalUsers: response.data.totalUsers,

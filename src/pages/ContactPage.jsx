@@ -22,7 +22,7 @@ function ContactPage() {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('http://localhost:8080/api/contact/send', formData);
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/contact/send`, formData);
             
             showNotification(response.data.message || "Thank you for your message! We'll get back to you soon.", 'success');
             setFormData({ name: '', email: '', message: '' }); // Reset form

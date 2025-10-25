@@ -66,10 +66,10 @@ function ProfilePage() {
     const config = { headers: { 'Authorization': `Bearer ${token}` } };
     try {
       const [userResponse, ridesResponse, receivedRatingsResponse, givenRatingsResponse] = await Promise.all([
-        axios.get('http://localhost:8080/api/employees/me', config),
-        axios.get('http://localhost:8080/api/rides/my-rides', config),
-        axios.get('http://localhost:8080/api/ratings/my-ratings', config),
-        axios.get('http://localhost:8080/api/ratings/given', config)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/employees/me`, config),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/rides/my-rides`, config),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/ratings/my-ratings`, config),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/ratings/given`, config)
       ]);
       setUser(userResponse.data); // Set the 'user' state
       setMyRides(ridesResponse.data);
@@ -112,7 +112,7 @@ function ProfilePage() {
     event.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.put('http://localhost:8080/api/employees/me', formData, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/employees/me`, formData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setUser(response.data);
@@ -166,7 +166,7 @@ function ProfilePage() {
       fileFormData.append('file', blob, 'profile.jpg');
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.post('http://localhost:8080/api/employees/me/profile-picture', fileFormData, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/employees/me/profile-picture`, fileFormData, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -193,7 +193,7 @@ function ProfilePage() {
     showConfirmation("Are you sure you want to remove your profile picture?", async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.delete('http://localhost:8080/api/employees/me/profile-picture', {
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/employees/me/profile-picture`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setUser(response.data);
@@ -208,7 +208,7 @@ function ProfilePage() {
   const handleSubmitRating = async (ratingData) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.post('http://localhost:8080/api/ratings', ratingData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, ratingData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       showNotification('Thank you for your feedback!');

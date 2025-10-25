@@ -14,7 +14,7 @@ function Notifications() {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.get('http://localhost:8080/api/notifications', {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/notifications`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setNotifications(response.data);
@@ -40,7 +40,7 @@ function Notifications() {
         if (!isOpen && notifications.length > 0) {
             const token = localStorage.getItem('token');
             try {
-                await axios.post('http://localhost:8080/api/notifications/read-all', {}, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/notifications/read-all`, {}, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 // Optimistically update the UI to remove the badge immediately

@@ -62,7 +62,7 @@ function AutocompleteInput({ value, onChange, placeholder, ...props }) {
     }
     setIsSearching(true);
     try {
-      const response = await axios.get(`http://localhost:8080/api/places/autocomplete?query=${query}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/places/autocomplete?query=${query}`);
       setSuggestions(response.data || []);
     } catch (error) {
       console.error('Error fetching autocomplete suggestions:', error);
@@ -519,7 +519,7 @@ function SearchPage() {
     }
 
     try {
-      const response = await axios.get('http://localhost:8080/api/rides', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/rides`, {
         params: params,
         headers: { Authorization: `Bearer ${token}` },
       });

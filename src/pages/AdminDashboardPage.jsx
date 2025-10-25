@@ -20,8 +20,8 @@ function AdminDashboardPage() {
     try {
       const config = { headers: { 'Authorization': `Bearer ${token}` } };
       const [statsResponse, employeesResponse] = await Promise.all([
-        axios.get('http://localhost:8080/api/admin/stats', config),
-        axios.get('http://localhost:8080/api/admin/employees', config)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/admin/stats`, config),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/admin/employees`, config)
       ]);
       setStats(statsResponse.data);
       setEmployees(employeesResponse.data);
@@ -37,7 +37,7 @@ function AdminDashboardPage() {
   const handleUserUpdate = async (userId, updateData) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:8080/api/admin/employees/${userId}`, updateData, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/employees/${userId}`, updateData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       alert('User updated successfully!');
