@@ -1,8 +1,9 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'; // Import useLocation
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { NotificationProvider } from './context/NotificationContext.jsx';
 import Navbar from './components/Navbar';
 import RouteGuard from './components/RouteGuard';
-import Chatbot from './components/Chatbot'; // <-- 1. Import the Chatbot
+import Chatbot from './components/Chatbot';
+import ReactGA from 'react-ga4'; // <-- Add this import
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -16,17 +17,21 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import './App.css';
 import './StaticPages.css';
-import { useState, useEffect } from 'react'; // <-- Import useState, useEffect
+import { useState, useEffect } from 'react';
 
 function App() {
-  const location = useLocation(); // <-- Get current location
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // <-- Track login state
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
-  // Update login state when token changes (e.g., after login/logout)
-  // Or when location changes (in case of direct navigation after login)
+  // Track page views whenever location changes
+  useEffect(() => {
+    ReactGA.send({ hitType: 'pageview', page: location.pathname });
+  }, [location]);
+
+  // Update login state when token changes
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem('token'));
-  }, [location]); // Re-check on route change
+  }, [location]);
 
   return (
     <NotificationProvider>
@@ -53,7 +58,7 @@ function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-        {/* 2. Conditionally render Chatbot if logged in */}
+        {/* Conditionally render Chatbot if logged in */}
         {isLoggedIn && <Chatbot />}
       </div>
     </NotificationProvider>
