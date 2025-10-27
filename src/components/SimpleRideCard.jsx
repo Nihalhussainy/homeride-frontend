@@ -8,7 +8,24 @@ import './SimpleRideCard.css'; // Make sure this CSS file is updated as well
 function SimpleRideCard({ ride, searchOrigin, searchDestination }) {
     const navigate = useNavigate();
     const driver = ride.requester;
-    const availableSeats = ride.vehicleCapacity - ride.participants.length;
+
+    // --- MODIFICATION START ---
+    // Calculate the total number of seats already booked
+    const totalSeatsBooked = useMemo(() => {
+        if (!ride.participants || ride.participants.length === 0) {
+            return 0;
+        }
+        // Sum up the 'seatsBooked' from each participant
+        return ride.participants.reduce((total, participant) => {
+            // Default to 1 if seatsBooked is missing, though it should always be present
+            return total + (participant.seatsBooked || 1); 
+        }, 0);
+    }, [ride.participants]);
+
+    // Calculate available seats based on total booked
+    const availableSeats = ride.vehicleCapacity - totalSeatsBooked;
+    // --- MODIFICATION END ---
+
 
     // Helper function to calculate ride completion time (departure + duration)
     const getRideCompletionTime = useCallback((rideData) => {
@@ -280,12 +297,15 @@ function SimpleRideCard({ ride, searchOrigin, searchDestination }) {
                           <FiCheckCircle size={14} /> Completed
                       </span>
                   )}
+                  {/* --- MODIFICATION START --- */}
+                  {/* This now uses the correct 'availableSeats' calculation */}
                   {rideStatus === 'upcoming' && (
                       <div className={`seats-container ${availableSeats <= 2 ? 'low-seats' : ''}`}>
                           <FiUsers className="seats-icon" />
                           <span className="seats-text">{availableSeats} seat{availableSeats !== 1 ? 's' : ''} left</span>
                       </div>
                   )}
+                  {/* --- MODIFICATION END --- */}
                 </div>
                  {/* --- END Conditional --- */}
 

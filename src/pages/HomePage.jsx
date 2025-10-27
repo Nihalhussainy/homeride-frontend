@@ -131,31 +131,31 @@ function HomePage() {
   });
   const [loadingStats, setLoadingStats] = useState(true);
 
-  // Fetch Stats function
+  // --- UPDATED fetchStats ---
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
-    const token = localStorage.getItem('token');
-    const config = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
-
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/stats`, config);
+      // Call the NEW public endpoint, NO token needed
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/public/stats`);
       setStats(prev => ({
-        ...prev,
+        ...prev, // Keep static values
         totalUsers: response.data.totalUsers,
         totalRides: response.data.totalRides,
       }));
     } catch (error) {
-      console.error("Failed to fetch stats:", error);
+      console.error("Failed to fetch public stats:", error);
+      // Handle error - show 'N/A'
       setStats(prev => ({
         ...prev,
-        totalUsers: prev.totalUsers ?? 50, // Fallback
-        totalRides: prev.totalRides ?? 100, // Fallback
+        totalUsers: 'N/A',
+        totalRides: 'N/A',
       }));
     } finally {
       setLoadingStats(false);
     }
-  }, []);
+  }, []); // No dependencies
 
+  // --- Call fetchStats on component mount ---
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);

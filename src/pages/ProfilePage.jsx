@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import RatingModal from '../components/RatingModal.jsx'; 
-import Button from '../components/Button.jsx'; 
-import Input from '../components/Input.jsx'; 
-import ImageCropperModal from '../components/ImageCropperModal.jsx'; 
-import '../App.css'; 
+import RatingModal from '../components/RatingModal.jsx';
+import Button from '../components/Button.jsx';
+import Input from '../components/Input.jsx';
+import ImageCropperModal from '../components/ImageCropperModal.jsx';
+import '../App.css';
 import './ProfilePage.css';
-import { useNotification } from '../context/NotificationContext.jsx'; 
+import { useNotification } from '../context/NotificationContext.jsx';
 import {
   FiStar,
   FiMail,
@@ -50,6 +50,7 @@ function ProfilePage() {
   const [visibleRatings, setVisibleRatings] = useState(RATINGS_PER_PAGE);
   const [visibleRides, setVisibleRides] = useState(RIDES_PER_PAGE);
 
+  // This function is now just a fallback.
   const extractCityName = useCallback((location) => {
     if (!location) return '';
     const parts = location.split(',');
@@ -105,8 +106,14 @@ function ProfilePage() {
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+    if (name === 'phoneNumber') {
+        const digits = value.replace(/[^\d]/g, '');      // Remove letters/symbols
+        const truncatedValue = digits.slice(0, 10);      // Keep only 10 digits
+        setFormData(prev => ({ ...prev, [name]: truncatedValue }));
+    } else {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    }
+};
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -204,8 +211,7 @@ function ProfilePage() {
       }
     });
   };
-
-  const handleSubmitRating = async (ratingData) => {
+const handleSubmitRating = async (ratingData) => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, ratingData, {
@@ -214,7 +220,8 @@ function ProfilePage() {
       showNotification('Thank you for your feedback!');
       setSelectedRideForRating(null); // Close modal
       fetchData(); // Refresh data to update given ratings list AND the "Rated" status
-    } catch (error) {
+    // --- FIX: Add opening curly brace here ---
+    } catch (error) { // <-- Added {
       // Handle "already rated" specifically if the backend provides a distinct error
       if (error.response?.status === 409 || error.response?.data?.message?.includes('already submitted')) {
          showNotification('You have already submitted a rating for this user on this ride.', 'error');
@@ -804,6 +811,47 @@ function ProfilePage() {
                       }
                       // --- END NEW CHECK ---
 
+
+                      // --- MODIFICATION START ---
+
+                      // 1. Build a map of route points (full strings) to city names
+                      // This map will store {"Nellore-SPSR Bus stand...": "Nellore"}
+                      const routeCityMap = new Map();
+                      if (ride.origin) {
+                        routeCityMap.set(ride.origin, ride.originCity || extractCityName(ride.origin));
+                      }
+                      if (ride.stopovers && ride.stopovers.length > 0) {
+                        ride.stopovers.forEach(stop => {
+                          if (stop.point) {
+                            // Use the 'city' field from the stopover if it exists, otherwise fallback
+                            routeCityMap.set(stop.point, stop.city || extractCityName(stop.point));
+                          }
+                        });
+                      }
+                      if (ride.destination) {
+                        routeCityMap.set(ride.destination, ride.destinationCity || extractCityName(ride.destination));
+                      }
+
+                      // 2. Determine if user was driver or passenger
+                      const isDriver = ride.requester?.id === user?.id;
+                      const userParticipation = !isDriver
+                          ? ride.participants?.find(p => p.participant?.id === user?.id)
+                          : null;
+
+                      // 3. Set display origin/destination using the map
+                      const displayOrigin = (isDriver || !userParticipation)
+                          ? (ride.originCity || extractCityName(ride.origin)) // Driver/fallback: Show main ride city
+                          // Passenger: Look up their specific pickup point in the map to find its city
+                          : (routeCityMap.get(userParticipation.pickupPoint) || extractCityName(userParticipation.pickupPoint));
+
+                      const displayDestination = (isDriver || !userParticipation)
+                          ? (ride.destinationCity || extractCityName(ride.destination)) // Driver/fallback: Show main ride city
+                          // Passenger: Look up their specific dropoff point in the map to find its city
+                          : (routeCityMap.get(userParticipation.dropoffPoint) || extractCityName(userParticipation.dropoffPoint));
+                      
+                      // --- MODIFICATION END ---
+
+
                       return (
                         <div key={ride.id} className="ride-card" style={{ animationDelay: `${idx * 0.1}s` }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -811,8 +859,9 @@ function ProfilePage() {
                             <div style={{ flex: 1 }}>
                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                                 <FiMapPin size={16} style={{ color: '#ec4899', flexShrink: 0 }} />
+                                {/* This <p> tag now uses the new variables */}
                                 <p style={{ fontSize: '15px', fontWeight: '600', margin: 0, color: 'var(--text-primary)' }}>
-                                  {ride.originCity || extractCityName(ride.origin)} → {ride.destinationCity || extractCityName(ride.destination)}
+                                  {displayOrigin} <FiArrowRight size={12} style={{ margin: '0 4px', color: 'var(--text-secondary)' }} /> {displayDestination}
                                 </p>
                               </div>
                               <p style={{ color: 'var(--text-secondary)', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', margin: 0 }}>
@@ -852,7 +901,6 @@ function ProfilePage() {
                             ) : (
                                <span style={{fontSize: '12px', color: 'var(--text-secondary)', marginLeft: '12px', fontStyle: 'italic'}}>
                                    {/* Optional: Message if no one else was on the ride */}
-                                   {/* You were the only one */}
                                </span>
                             )}
                             {/* --- END UPDATED CONDITIONAL RENDERING --- */}
