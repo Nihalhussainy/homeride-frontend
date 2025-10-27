@@ -6,6 +6,7 @@ import { FiSend, FiUsers } from 'react-icons/fi';
 import './ChatBox.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 function ChatBox({ rideId, currentUser, participants }) {
     const [messages, setMessages] = useState([]);
@@ -15,7 +16,6 @@ function ChatBox({ rideId, currentUser, participants }) {
     const [isLoading, setIsLoading] = useState(true);
     const messagesEndRef = useRef(null);
     const clientRef = useRef(null);
-    const reconnectTimeoutRef = useRef(null);
 
     // Fetch chat history on component mount
     useEffect(() => {
@@ -40,7 +40,7 @@ function ChatBox({ rideId, currentUser, participants }) {
         }
     }, [rideId]);
 
-    // Set up WebSocket connection using Client
+    // Set up WebSocket connection
     useEffect(() => {
         if (!rideId || !currentUser) return;
 
@@ -49,16 +49,21 @@ function ChatBox({ rideId, currentUser, participants }) {
             
             // Convert http(s) URL to ws(s) for WebSocket connection
             const wsUrl = `${import.meta.env.VITE_API_URL}/ws`.replace(/^http/, 'ws');
-            
-            // Include token as query parameter
-            const wsUrlWithToken = `${wsUrl}?token=${token}`;
+
+            // Create SockJS transport with credentials
+            const socket = new SockJS(wsUrl, null, {
+                transports: ['websocket', 'xhr-streaming', 'xhr-polling']
+            });
 
             // Create and configure the Stomp Client
             const client = new Client({
-                brokerURL: wsUrlWithToken,
+                webSocketFactory: () => socket,
                 reconnectDelay: 5000,
                 heartbeatIncoming: 4000,
                 heartbeatOutgoing: 4000,
+                connectHeaders: {
+                    'Authorization': `Bearer ${token}`
+                },
                 debug: (str) => { console.log('STOMP DEBUG:', str); }
             });
 
@@ -71,18 +76,22 @@ function ChatBox({ rideId, currentUser, participants }) {
 
                 // Subscribe to the ride topic
                 client.subscribe(`/topic/ride.${rideId}`, (message) => {
-                    const receivedMessage = JSON.parse(message.body);
-                    // Add message to state, preventing duplicates
-                    setMessages(prev => {
-                        const messageExists = prev.some(msg =>
-                            msg.id === receivedMessage.id ||
-                            (msg.content === receivedMessage.content &&
-                             msg.senderEmail === receivedMessage.senderEmail &&
-                             Math.abs(new Date(msg.timestamp) - new Date(receivedMessage.timestamp)) < 1500)
-                        );
-                        if (messageExists) return prev;
-                        return [...prev, receivedMessage];
-                    });
+                    try {
+                        const receivedMessage = JSON.parse(message.body);
+                        // Add message to state, preventing duplicates
+                        setMessages(prev => {
+                            const messageExists = prev.some(msg =>
+                                msg.id === receivedMessage.id ||
+                                (msg.content === receivedMessage.content &&
+                                 msg.senderEmail === receivedMessage.senderEmail &&
+                                 Math.abs(new Date(msg.timestamp) - new Date(receivedMessage.timestamp)) < 1500)
+                            );
+                            if (messageExists) return prev;
+                            return [...prev, receivedMessage];
+                        });
+                    } catch (error) {
+                        console.error('Error parsing received message:', error);
+                    }
                 });
             };
 
@@ -109,12 +118,9 @@ function ChatBox({ rideId, currentUser, participants }) {
 
             // Activate the client to initiate connection
             client.activate();
-
-            // Store client in ref immediately for potential cleanup
             clientRef.current = client;
         };
 
-        // Call connectWebSocket
         connectWebSocket();
 
         // Cleanup function: Deactivate client on component unmount
@@ -122,9 +128,6 @@ function ChatBox({ rideId, currentUser, participants }) {
             if (clientRef.current && clientRef.current.active) {
                 clientRef.current.deactivate();
                 console.log('STOMP Client deactivated on unmount');
-            }
-            if (reconnectTimeoutRef.current) {
-                clearTimeout(reconnectTimeoutRef.current);
             }
         };
     }, [rideId, currentUser]);
