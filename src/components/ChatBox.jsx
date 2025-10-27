@@ -6,7 +6,6 @@ import { FiSend, FiUsers } from 'react-icons/fi';
 import './ChatBox.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 
 function ChatBox({ rideId, currentUser, participants }) {
     const [messages, setMessages] = useState([]);
@@ -50,14 +49,9 @@ function ChatBox({ rideId, currentUser, participants }) {
             // Convert http(s) URL to ws(s) for WebSocket connection
             const wsUrl = `${import.meta.env.VITE_API_URL}/ws`.replace(/^http/, 'ws');
 
-            // Create SockJS transport with credentials
-            const socket = new SockJS(wsUrl, null, {
-                transports: ['websocket', 'xhr-streaming', 'xhr-polling']
-            });
-
             // Create and configure the Stomp Client
             const client = new Client({
-                webSocketFactory: () => socket,
+                brokerURL: wsUrl,
                 reconnectDelay: 5000,
                 heartbeatIncoming: 4000,
                 heartbeatOutgoing: 4000,
