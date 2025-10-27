@@ -6,6 +6,7 @@ import { FiSend, FiUsers } from 'react-icons/fi';
 import './ChatBox.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 function ChatBox({ rideId, currentUser, participants }) {
     const [messages, setMessages] = useState([]);
