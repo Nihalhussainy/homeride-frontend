@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from "react"; // Added useCallback
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import {
   FiSearch,
   FiShield,
@@ -15,17 +15,17 @@ import {
   FiCalendar,
   FiChevronLeft,
   FiChevronRight,
-  FiLoader, // Added for loading state
+  FiLoader,
 } from "react-icons/fi";
 
+import { useNotification } from "../context/NotificationContext.jsx";
 import Button from "../components/Button.jsx";
 import "./HomePage.css";
 
 import heroVideo from "../assets/hero-background.mp4";
 
-// Calendar component remains the same...
+// Calendar component
 function Calendar({ selectedDate, onDateSelect, onClose }) {
-  // ... (keep existing Calendar code) ...
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const daysInMonth = (date) => {
@@ -112,9 +112,9 @@ function Calendar({ selectedDate, onDateSelect, onClose }) {
   );
 }
 
-
 function HomePage() {
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const videoRef = useRef(null);
   const calendarRef = useRef(null);
@@ -122,29 +122,31 @@ function HomePage() {
   const [travelDate, setTravelDate] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
 
-  // State for stats
   const [stats, setStats] = useState({
     totalUsers: null,
     totalRides: null,
-    savedByEmployees: '10K', // Kept static
-    co2Reduced: '5 Tons' // Kept static
+    savedByEmployees: '10K',
+    co2Reduced: '5 Tons'
   });
   const [loadingStats, setLoadingStats] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // --- UPDATED fetchStats ---
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      // Call the NEW public endpoint, NO token needed
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/public/stats`);
       setStats(prev => ({
-        ...prev, // Keep static values
+        ...prev,
         totalUsers: response.data.totalUsers,
         totalRides: response.data.totalRides,
       }));
     } catch (error) {
       console.error("Failed to fetch public stats:", error);
-      // Handle error - show 'N/A'
       setStats(prev => ({
         ...prev,
         totalUsers: 'N/A',
@@ -153,13 +155,11 @@ function HomePage() {
     } finally {
       setLoadingStats(false);
     }
-  }, []); // No dependencies
+  }, []);
 
-  // --- Call fetchStats on component mount ---
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
-
 
   useEffect(() => {
     const video = videoRef.current;
@@ -172,7 +172,7 @@ function HomePage() {
   useEffect(() => {
     const interval = setInterval(() => { setActiveTestimonial((prev) => (prev + 1) % testimonials.length); }, 6000);
     return () => clearInterval(interval);
-  }, []); // Added testimonials.length dependency - corrected, it's not needed as length is static here
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => { if (calendarRef.current && !calendarRef.current.contains(event.target)) { setShowCalendar(false); } };
@@ -182,6 +182,16 @@ function HomePage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      showNotification("Please login to search for a ride.", "error");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+      return;
+    }
+
     const origin = e.target.elements.origin.value;
     const destination = e.target.elements.destination.value;
     const params = new URLSearchParams();
@@ -194,10 +204,9 @@ function HomePage() {
   const formatDisplayDate = (dateString) => {
     if (!dateString) return 'Select Date';
     try {
-        // Parse the date string assuming local time (YYYY-MM-DD)
         const parts = dateString.split('-');
         const year = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+        const month = parseInt(parts[1], 10) - 1;
         const day = parseInt(parts[2], 10);
         const date = new Date(year, month, day);
 
@@ -212,44 +221,38 @@ function HomePage() {
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     } catch (e) {
         console.error("Error formatting date:", e);
-        return 'Invalid Date'; // Handle potential parsing errors
+        return 'Invalid Date';
     }
   };
 
-
   const testimonials = [
-    // ... (Testimonials array remains unchanged) ...
     {
       name: "Priya S.",
       role: "Marketing Department",
       text: "Using HomeRide has been a game-changer. I've met so many people from other teams that I'd never have interacted with otherwise. Plus, I'm saving a fortune on petrol!",
       rating: 5,
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
     },
     {
       name: "Rohan M.",
       role: "Software Engineer",
       text: "As a new joiner, finding a ride was daunting. HomeRide made it so simple and safe. My driver, a senior developer, even gave me tips for my first week!",
       rating: 5,
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     },
     {
       name: "Sarah Johnson",
       role: "Marketing Manager",
       text: "HomeRide has completely transformed my daily commute. I've saved over $200 monthly and made amazing friends along the way!",
       rating: 5,
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
     },
     {
       name: "Michael Chen",
       role: "Software Engineer",
-      text: "Who knew commuting could be this fun? Thanks to Homeride, I’ve turned my daily traffic jam into a rolling gossip session with colleagues. Bonus: I haven’t touched my car’s fuel cap in weeks!",
+      text: "Who knew commuting could be this fun? Thanks to Homeride, I've turned my daily traffic jam into a rolling gossip session with colleagues. Bonus: I haven't touched my car's fuel cap in weeks!",
       rating: 5,
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
     },
   ];
 
@@ -258,7 +261,8 @@ function HomePage() {
       {/* Hero Section */}
       <section className="hero-section">
          <video ref={videoRef} autoPlay muted playsInline className="hero-video">
-           <source src={heroVideo} type="video/mp4" /> Your browser does not support the video tag.
+           <source src={heroVideo} type="video/mp4" />
+           Your browser does not support the video tag.
          </video>
          <div className="hero-overlay"></div>
          <div className="hero-content">
@@ -288,7 +292,6 @@ function HomePage() {
 
       {/* Features Section */}
       <section className="features-section">
-        {/* ... (Features content remains unchanged) ... */}
         <div className="feature-card" data-aos="fade-up">
           <div className="feature-icon-wrapper">
             <FiShield size={40} className="feature-icon" />
@@ -323,7 +326,6 @@ function HomePage() {
 
       {/* Benefits Section */}
       <section className="benefits-section">
-        {/* ... (Benefits content remains unchanged) ... */}
         <h2>Why Choose HomeRide?</h2>
         <div className="benefits-grid">
           <div className="benefit-card">
@@ -338,12 +340,7 @@ function HomePage() {
           </div>
           <div className="benefit-card">
             <div className="benefit-icon-wrapper blue">
-              <FiTrendingDown
-                size={32}
-                style={{
-                  transform: "rotate(180deg)",
-                }}
-              />
+              <FiTrendingDown size={32} style={{ transform: "rotate(180deg)" }} />
             </div>
             <h3>Reduce Carbon Footprint</h3>
             <p>
@@ -383,9 +380,7 @@ function HomePage() {
             <div className="cta-img-gradient"></div>
           </div>
           <div className="cta-message-section">
-            <h2>
-                Driving in your own car ? <span className="emphasize"></span>
-            </h2>
+            <h2>Driving in your own car ? <span className="emphasize"></span></h2>
             <p>
               Make your commute more affordable and enjoyable.
               <br />
@@ -402,13 +397,12 @@ function HomePage() {
         </section>
       </section>
 
-      {/* --- How It Works Section (Images Restored) --- */}
+      {/* How It Works Section */}
       <section className="how-it-works-section">
         <h2>How HomeRide Works</h2>
         <div className="steps-container">
           <div className="step">
             <div className="step-image">
-              {/* Restored Original Image Source */}
               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfc69qzWMfcUDAwhMRwAOfHGlOdYLJ53mnnIeYoXb7Z-_Rsc5N9yPIlljr6cAL-Qj8ULlNaLcJ036QAp3zXPfjaBz0i-7XSc61M6cyusB9OlfbPS-JgGU13WouzaWCezHwZGwNwp7e3CsIrjMS0v0dI88WOvXgUSYJzNjYz9zmkimn9PmtQWbhhxmWMLmcujdMlsvByUYlSOQwZB87HJNovA49GYUctQyTpu7y5wzmA9Shgpi1uZqW0-C_kAyi12VcFj0j3CwpaY6C" alt="Search for rides" />
               <div className="step-image-overlay"></div>
             </div>
@@ -420,7 +414,6 @@ function HomePage() {
           </div>
           <div className="step">
             <div className="step-image">
-              {/* Restored Original Image Source */}
               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdaytJ6qw6v0TblzjYMBVGXImt5g3cMdgDfWP9-HY3A8m3_VybksBMgrG0PwmyGwHTCVZEm6enoFOy8_4hSaUjRdNDVshCbQRVCdsBqTENa2idaqw2zyHQwll8eVOAHVzVgPDugMkJHiauhExpWponpL5hypnEooaS6opdkRgeA3V8npiCStW51oMuf1_ZgzxTpUMHR-wssokndwJRgTvvG3v0nRNmozrDAWKsgU3kXkFf8OQ4Y_7fLj3058SzP-Bs6YLmkHODqYhe" alt="Connect with colleagues" />
               <div className="step-image-overlay"></div>
             </div>
@@ -432,7 +425,6 @@ function HomePage() {
           </div>
           <div className="step">
             <div className="step-image">
-              {/* Restored Original Image Source */}
               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwBG1RpQ-lKYpgdo8117Q78nvFPJc563Ec1gutSG2ATdGDDkA3cJGKcVzEii2WqV1CPt6O_94c25pe707-Nx8-8MlZm18xUZ84MpaR6EpLYD1WAI4sEnhoRE_LKSP3CdIDaHngTl3P9ak4Ko9YAl8c8aGSAl6UMFWekqnxRTuW-yqJEuNIhLQPx2spdlC9S0jFKindOqdDsqHLNtFle2L_lyVNRx9MDStMdkL7f36bONxlyv9KqtYfYC-SIhtVpflTwZp8CrXZp_je" alt="Travel together" />
               <div className="step-image-overlay"></div>
             </div>
@@ -444,9 +436,8 @@ function HomePage() {
           </div>
         </div>
       </section>
-      {/* --- END Restored Images --- */}
 
-      {/* Stats Section (Live Data Enabled) */}
+      {/* Stats Section */}
       <section className="stats-section">
         <div className="stat-item">
           <div className="stat-number">{loadingStats ? <FiLoader style={{ animation: 'spin 1s linear infinite' }} /> : stats.totalUsers ?? 'N/A'}</div>
@@ -456,13 +447,18 @@ function HomePage() {
           <div className="stat-number">{loadingStats ? <FiLoader style={{ animation: 'spin 1s linear infinite' }} /> : stats.totalRides ?? 'N/A'}</div>
           <div className="stat-label">Rides Completed</div>
         </div>
-        <div className="stat-item"><div className="stat-number">{stats.savedByEmployees}</div><div className="stat-label">Saved by Employees</div></div>
-        <div className="stat-item"><div className="stat-number">{stats.co2Reduced}</div><div className="stat-label">CO2 Reduced</div></div>
+        <div className="stat-item">
+          <div className="stat-number">{stats.savedByEmployees}</div>
+          <div className="stat-label">Saved by Employees</div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-number">{stats.co2Reduced}</div>
+          <div className="stat-label">CO2 Reduced</div>
+        </div>
       </section>
 
       {/* Testimonials Section */}
       <section className="testimonials-section">
-        {/* ... (Testimonials content remains unchanged) ... */}
         <h2>Community Voices</h2>
         <div className="testimonials-grid">
           {testimonials.map((testimonial, index) => (
@@ -472,7 +468,7 @@ function HomePage() {
                 index === activeTestimonial ? "active" : ""
               }`}
             >
-              <div className="testimonial-quote-icon">"</div> {/* Changed to quote */}
+              <div className="testimonial-quote-icon">"</div>
               <p className="testimonial-text-modern">{testimonial.text}</p>
               <div className="testimonial-author-modern">
                 <img
@@ -492,8 +488,7 @@ function HomePage() {
 
       {/* Footer */}
       <footer style={{
-        // ... (Footer styles remain unchanged) ...
-         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
         borderTop: '1px solid rgba(234, 179, 8, 0.15)',
         paddingTop: '100px',
         paddingBottom: '60px',
@@ -764,7 +759,6 @@ function HomePage() {
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

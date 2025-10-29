@@ -291,30 +291,76 @@ const CustomDatePicker = ({ value, onChange, minDate }) => {
     );
 };
 
-const CustomTimePicker = ({ value, onChange }) => {
+// --- MODIFIED CustomTimePicker ---
+const CustomTimePicker = ({ value, onChange, selectedDate }) => { // <-- Added selectedDate prop
     const initialHour = value ? parseInt(value.split(':')[0], 10) : 9;
     const initialMinute = value ? parseInt(value.split(':')[1], 10) : 0;
     const [hour, setHour] = useState(initialHour);
     const [minute, setMinute] = useState(initialMinute);
+    const [isToday, setIsToday] = useState(false);
+    const [minHour, setMinHour] = useState(0);
+    const [minMinute, setMinMinute] = useState(0);
 
+    // Check if the selected date is today and get current time
     useEffect(() => {
-        if (value) {
-            let [h, m] = value.split(':').map(Number);
-            if (isNaN(h) || h < 0 || h > 23) h = 9;
-            if (isNaN(m) || m < 0 || m > 59) m = 0;
-            setHour(h);
-            setMinute(m);
+        const today = new Date();
+        const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const isSelectedDateToday = selectedDate === todayString;
+        setIsToday(isSelectedDateToday);
+
+        if (isSelectedDateToday) {
+            const now = new Date();
+            setMinHour(now.getHours());
+            setMinMinute(now.getMinutes());
+            // If the current selection is in the past, reset it to the current time + buffer (e.g., 5 mins)
+            if (hour < now.getHours() || (hour === now.getHours() && minute < now.getMinutes())) {
+                let nextMinute = now.getMinutes() + 5; // Add a 5-minute buffer
+                let nextHour = now.getHours();
+                if (nextMinute >= 60) {
+                    nextMinute -= 60;
+                    nextHour = (nextHour + 1) % 24;
+                }
+                setHour(nextHour);
+                setMinute(nextMinute);
+            }
         } else {
-            setHour(9);
-            setMinute(0);
+            setMinHour(0);
+            setMinMinute(0);
         }
-    }, [value]);
+    }, [selectedDate, hour, minute]); // Rerun when date changes or time potentially needs reset
 
-    const handleHourUp = () => setHour(prev => (prev + 1) % 24);
-    const handleHourDown = () => setHour(prev => (prev - 1 + 24) % 24);
-    const handleMinuteUp = () => setMinute(prev => (prev + 1) % 60);
-    const handleMinuteDown = () => setMinute(prev => (prev - 1 + 60) % 60);
+    // Update time state and check against minimum time if today
+    const updateTime = (newHour, newMinute) => {
+        if (isToday) {
+            if (newHour < minHour || (newHour === minHour && newMinute < minMinute)) {
+                // Don't update if it's before the minimum time for today
+                return;
+            }
+        }
+        setHour(newHour);
+        setMinute(newMinute);
+    };
 
+    const handleHourUp = () => updateTime((hour + 1) % 24, minute);
+    const handleHourDown = () => updateTime((hour - 1 + 24) % 24, minute);
+    const handleMinuteUp = () => {
+        const nextMin = (minute + 1) % 60;
+        let nextHr = hour;
+        if (nextMin === 0 && minute === 59) { // Rollover hour up
+            nextHr = (hour + 1) % 24;
+        }
+        updateTime(nextHr, nextMin);
+    }
+    const handleMinuteDown = () => {
+         const prevMin = (minute - 1 + 60) % 60;
+         let prevHr = hour;
+         if (prevMin === 59 && minute === 0) { // Rollover hour down
+            prevHr = (hour - 1 + 24) % 24;
+         }
+         updateTime(prevHr, prevMin);
+    }
+
+    // Call onChange whenever hour or minute changes
     useEffect(() => {
         const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
         onChange(timeStr);
@@ -322,6 +368,10 @@ const CustomTimePicker = ({ value, onChange }) => {
 
     const displayHour = String(hour).padStart(2, '0');
     const displayMinute = String(minute).padStart(2, '0');
+
+    // --- Disable buttons if the next value would be in the past ---
+    const isHourDownDisabled = isToday && ((hour - 1 + 24) % 24 < minHour);
+    const isMinuteDownDisabled = isToday && hour === minHour && ((minute - 1 + 60) % 60 < minMinute);
 
     return (
         <div className="custom-time-picker-container">
@@ -332,7 +382,7 @@ const CustomTimePicker = ({ value, onChange }) => {
                         <FiPlus />
                     </button>
                     <div className="time-display">{displayHour}</div>
-                    <button className="time-down-btn" onClick={handleHourDown} type="button">
+                    <button className="time-down-btn" onClick={handleHourDown} type="button" disabled={isHourDownDisabled}> {/* Disable check */}
                         <FiMinus />
                     </button>
                 </div>
@@ -342,11 +392,12 @@ const CustomTimePicker = ({ value, onChange }) => {
                         <FiPlus />
                     </button>
                     <div className="time-display">{displayMinute}</div>
-                    <button className="time-down-btn" onClick={handleMinuteDown} type="button">
+                    <button className="time-down-btn" onClick={handleMinuteDown} type="button" disabled={isMinuteDownDisabled}> {/* Disable check */}
                         <FiMinus />
                     </button>
                 </div>
             </div>
+             {isToday && <p style={{textAlign: 'center', marginTop: '15px', color: 'var(--text-secondary)', fontSize: '0.85rem'}}>Minimum departure time for today is {String(minHour).padStart(2,'0')}:{String(minMinute).padStart(2,'0')}.</p>}
         </div>
     );
 };
@@ -766,6 +817,8 @@ function OfferRidePage() {
                         <CustomTimePicker
                             value={formData.travelTime}
                             onChange={(time) => handleInputChange('travelTime', time)}
+                            selectedDate={formData.travelDate} 
+                             
                         />
                         <div className="form-actions">
                             <Button onClick={handleBack} className="secondary" type="button">Back</Button>
